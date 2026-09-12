@@ -44,3 +44,11 @@ export type CreateExpenseInput = {
   rawInput: string;
   confidence: number | null;
 };
+
+export type UpdateExpenseInput = {
+  amount?: string;
+  currency?: SupportedCurrency;
+  category?: ExpenseCategory;
+  description?: string;
+  merchant?: string | null;
+};

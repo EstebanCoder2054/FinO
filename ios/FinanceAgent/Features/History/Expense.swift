@@ -72,7 +72,7 @@ final class Expense: Identifiable {
 
 extension Expense {
   static let categories = [
-    "Comida", "Transporte", "Hogar", "Entretenimiento", "Salud",
+    "Comida", "Transporte", "Hogar", "Entretenimiento", "Compras", "Salud",
     "Sueldo", "Préstamo", "Arriendo", "Otros"
   ]
 }

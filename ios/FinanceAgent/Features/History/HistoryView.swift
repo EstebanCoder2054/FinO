@@ -5,7 +5,6 @@ import SwiftUI
 struct HistoryView: View {
   @Binding var voiceCaptureRequested: Bool
   @Environment(\.modelContext) private var modelContext
-  @Environment(\.dismiss) private var dismiss
   @Query(sort: \Expense.createdAt, order: .reverse) private var expenses: [Expense]
 
   @State private var expenseToEdit: Expense?
@@ -39,7 +38,7 @@ struct HistoryView: View {
         .padding(.bottom, 32)
       }
     }
-    .navigationTitle("Historial")
+    .navigationTitle("Fino")
     .navigationBarTitleDisplayMode(.inline)
     .toolbarColorScheme(.dark, for: .navigationBar)
     .toolbarBackground(.hidden, for: .navigationBar)
@@ -150,12 +149,22 @@ struct HistoryView: View {
 
   private var balance: Double { totalIncome - totalExpense }
 
+  /// Aggregates (balance, KPIs, category totals) sum amounts across
+  /// currencies, so they need one currency to format in. Uses whichever
+  /// currency actually shows up most in the stored expenses instead of
+  /// assuming COP, so the dashboard stays correct if the backend/user ever
+  /// records in USD or EUR (see `ExpenseFormView.supportedCurrencies`).
+  private var primaryCurrency: String {
+    let counts = Dictionary(grouping: expenses, by: \.currency).mapValues(\.count)
+    return counts.max { $0.value < $1.value }?.key ?? "COP"
+  }
+
   private var balanceCard: some View {
     VStack(alignment: .leading, spacing: 6) {
       Text("Balance")
         .font(.caption.weight(.semibold))
         .foregroundStyle(.white.opacity(0.6))
-      Text(balance, format: .currency(code: "COP").precision(.fractionLength(0)))
+      Text(balance, format: .currency(code: primaryCurrency).precision(.fractionLength(0)))
         .font(.system(.largeTitle, design: .rounded, weight: .bold))
         .foregroundStyle(balance >= 0 ? ExpenseStyle.incomeColor : ExpenseStyle.expenseColor)
       Text("\(expenses.count) movimiento\(expenses.count == 1 ? "" : "s") registrado\(expenses.count == 1 ? "" : "s")")
@@ -190,7 +199,7 @@ struct HistoryView: View {
           .font(.caption.weight(.semibold))
           .foregroundStyle(.white.opacity(0.6))
       }
-      Text(amount, format: .currency(code: "COP").precision(.fractionLength(0)))
+      Text(amount, format: .currency(code: primaryCurrency).precision(.fractionLength(0)))
         .font(.title3.weight(.bold))
         .foregroundStyle(.white)
         .lineLimit(1)
@@ -357,7 +366,7 @@ struct HistoryView: View {
           Text(topCategory.category)
             .font(.caption.weight(.semibold))
             .foregroundStyle(.white.opacity(0.7))
-          Text(categoryTotal, format: .currency(code: "COP").precision(.fractionLength(0)))
+          Text(categoryTotal, format: .currency(code: primaryCurrency).precision(.fractionLength(0)))
             .font(.title3.weight(.bold))
             .foregroundStyle(.white)
             .lineLimit(1)
@@ -392,7 +401,7 @@ struct HistoryView: View {
         .padding(.vertical, 3)
         .background(color.opacity(0.15), in: Capsule())
 
-      Text(entry.amount, format: .currency(code: "COP").precision(.fractionLength(0)))
+      Text(entry.amount, format: .currency(code: primaryCurrency).precision(.fractionLength(0)))
         .font(.caption.weight(.semibold))
         .foregroundStyle(.white.opacity(0.8))
         .frame(width: 84, alignment: .trailing)
@@ -434,7 +443,7 @@ struct HistoryView: View {
             .buttonStyle(.plain)
             .contextMenu {
               Button(role: .destructive) {
-                modelContext.delete(expense)
+                delete(expense)
               } label: {
                 Label("Eliminar", systemImage: "trash")
               }
@@ -454,7 +463,6 @@ struct HistoryView: View {
 
   private func requestVoiceCapture() {
     voiceCaptureRequested = true
-    dismiss()
   }
 
   private func syncExpenses() async {
@@ -473,6 +481,17 @@ struct HistoryView: View {
       }
     } catch {
       // The local history remains usable if the network is unavailable.
+    }
+  }
+
+  /// Deletes locally right away and fires the backend delete in the
+  /// background; the row is gone from the UI either way, and there's no
+  /// remote data left to reconcile back in on the next sync.
+  private func delete(_ expense: Expense) {
+    let id = expense.id
+    modelContext.delete(expense)
+    Task {
+      try? await ExpenseAPIClient.shared.deleteExpense(id: id)
     }
   }
 

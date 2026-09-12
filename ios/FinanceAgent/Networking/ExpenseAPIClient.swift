@@ -15,7 +15,7 @@ enum ExpenseAPIError: Error {
   case serverMessage(String)
 }
 
-final class ExpenseAPIClient {
+final class ExpenseAPIClient: @unchecked Sendable {
   static let shared = ExpenseAPIClient()
 
   private let baseURL: URL
@@ -75,10 +75,104 @@ final class ExpenseAPIClient {
 
     throw ExpenseAPIError.invalidResponse
   }
+
+  /// `category` is the app's local display category (e.g. "Comida"); it is
+  /// mapped to the backend's category enum before sending, since the two
+  /// don't share a vocabulary (the backend has no income-side categories).
+  func updateExpense(
+    id: UUID,
+    amount: Double?,
+    currency: String,
+    category: String,
+    description: String
+  ) async throws -> CapturedExpense {
+    var request = URLRequest(url: baseURL.appending(path: "api/expenses/\(id.uuidString)"))
+    request.httpMethod = "PATCH"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.httpBody = try JSONEncoder().encode(
+      UpdateExpenseRequest(
+        amount: amount,
+        currency: currency,
+        category: Self.backendCategory(for: category),
+        description: description
+      )
+    )
+
+    let (data, response) = try await session.data(for: request)
+    guard let httpResponse = response as? HTTPURLResponse else {
+      throw ExpenseAPIError.invalidResponse
+    }
+
+    if (200..<300).contains(httpResponse.statusCode) {
+      let decoded = try decoder.decode(CreateExpenseResponse.self, from: data)
+      return decoded.expense.capturedExpense
+    }
+
+    if let apiError = try? decoder.decode(APIErrorResponse.self, from: data) {
+      throw ExpenseAPIError.serverMessage(apiError.message)
+    }
+
+    throw ExpenseAPIError.invalidResponse
+  }
+
+  func deleteExpense(id: UUID) async throws {
+    var request = URLRequest(url: baseURL.appending(path: "api/expenses/\(id.uuidString)"))
+    request.httpMethod = "DELETE"
+
+    let (data, response) = try await session.data(for: request)
+    guard let httpResponse = response as? HTTPURLResponse else {
+      throw ExpenseAPIError.invalidResponse
+    }
+
+    if (200..<300).contains(httpResponse.statusCode) {
+      return
+    }
+
+    if let apiError = try? decoder.decode(APIErrorResponse.self, from: data) {
+      throw ExpenseAPIError.serverMessage(apiError.message)
+    }
+
+    throw ExpenseAPIError.invalidResponse
+  }
+
+  /// Reverse of `RemoteExpense.displayCategory`. Lossy on purpose (several
+  /// backend categories collapse into one local label); picks one
+  /// representative backend value per label. Local-only labels that have no
+  /// backend counterpart (income buckets like "Sueldo") fall back to "other".
+  private static func backendCategory(for displayCategory: String) -> String {
+    switch displayCategory {
+    case "Comida": return "restaurants"
+    case "Transporte": return "transportation"
+    case "Hogar": return "utilities"
+    case "Entretenimiento": return "entertainment"
+    case "Compras": return "shopping"
+    case "Salud": return "health"
+    default: return "other"
+    }
+  }
 }
 
 private struct CreateExpenseRequest: Encodable {
   let input: String
+}
+
+private struct UpdateExpenseRequest: Encodable {
+  let amount: Double?
+  let currency: String
+  let category: String
+  let description: String
+
+  private enum CodingKeys: String, CodingKey {
+    case amount, currency, category, description
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encodeIfPresent(amount, forKey: .amount)
+    try container.encode(currency, forKey: .currency)
+    try container.encode(category, forKey: .category)
+    try container.encode(description, forKey: .description)
+  }
 }
 
 private struct CreateExpenseResponse: Decodable {
@@ -137,6 +231,8 @@ private struct RemoteExpense: Decodable {
       return "Hogar"
     case "entertainment", "subscriptions":
       return "Entretenimiento"
+    case "shopping":
+      return "Compras"
     case "health":
       return "Salud"
     default:

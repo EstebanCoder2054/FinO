@@ -4,9 +4,18 @@ import { secureHeaders } from "hono/secure-headers";
 import { randomUUID } from "node:crypto";
 import { ApiError, toErrorResponse } from "./api/errors.js";
 import { getOptionalEnv, getRequiredEnv } from "./config/env.js";
-import { listExpensesForUser, saveExpenseForUser } from "./services/expenseRepository.js";
+import {
+  deleteExpenseForUser,
+  listExpensesForUser,
+  saveExpenseForUser,
+  updateExpenseForUser
+} from "./services/expenseRepository.js";
 import { processExpenseInput } from "./services/expenseProcessor.js";
-import { validateCreateExpenseRequest } from "./validation/expenseRequest.js";
+import {
+  validateCreateExpenseRequest,
+  validateExpenseId,
+  validateUpdateExpenseRequest
+} from "./validation/expenseRequest.js";
 
 type AppBindings = {
   Variables: {
@@ -107,6 +116,30 @@ export function createApp() {
     return createExpense(c);
   });
 
+  app.patch("/expenses/:id", async (c) => {
+    return updateExpense(c);
+  });
+
+  app.patch("/api/expenses/:id", async (c) => {
+    return updateExpense(c);
+  });
+
+  app.patch("/api/index/expenses/:id", async (c) => {
+    return updateExpense(c);
+  });
+
+  app.delete("/expenses/:id", async (c) => {
+    return deleteExpense(c);
+  });
+
+  app.delete("/api/expenses/:id", async (c) => {
+    return deleteExpense(c);
+  });
+
+  app.delete("/api/index/expenses/:id", async (c) => {
+    return deleteExpense(c);
+  });
+
   app.onError((error, c) => {
     const response = toErrorResponse(error);
     return c.json(response.body, response.status);
@@ -168,6 +201,35 @@ async function createExpense(c: Context<AppBindings>) {
     },
     201
   );
+}
+
+async function updateExpense(c: Context<AppBindings>) {
+  const userId = resolveUserId();
+  const id = validateExpenseId(c.req.param("id") ?? "");
+  const patch = validateUpdateExpenseRequest(await c.req.json());
+  const expense = await updateExpenseForUser(userId, id, patch);
+
+  return c.json({
+    success: true,
+    expense: {
+      id: expense.id,
+      amount: expense.amount,
+      currency: expense.currency,
+      category: expense.category,
+      description: expense.description,
+      merchant: expense.merchant,
+      source: expense.source,
+      createdAt: expense.createdAt
+    }
+  });
+}
+
+async function deleteExpense(c: Context<AppBindings>) {
+  const userId = resolveUserId();
+  const id = validateExpenseId(c.req.param("id") ?? "");
+  await deleteExpenseForUser(userId, id);
+
+  return c.json({ success: true, id });
 }
 
 function resolveUserId(): string {
