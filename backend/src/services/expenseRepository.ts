@@ -38,6 +38,13 @@ export async function saveExpenseForUser(
     .single<ExpenseRow>();
 
   if (error) {
+    console.error("Supabase expense insert failed", {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint
+    });
+
     if (error.code === "23505") {
       throw new ApiError(409, "conflict", "This expense request was already processed.");
     }

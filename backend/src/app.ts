@@ -36,10 +36,48 @@ export function createApp() {
     });
   });
 
+  app.get("/api", (c) => {
+    return c.json({
+      success: true,
+      service: "FinoAI backend",
+      status: "ok"
+    });
+  });
+
   app.get("/health", (c) => {
     return c.json({
       success: true,
       status: "ok"
+    });
+  });
+
+  app.get("/api/health", (c) => {
+    return c.json({
+      success: true,
+      status: "ok"
+    });
+  });
+
+  app.get("/debug/runtime", async (c) => {
+    const serviceRolePayload = decodeJwtPayload(process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    return c.json({
+      success: true,
+      env: {
+        nodeEnv: process.env.NODE_ENV ?? null,
+        authMode: process.env.AUTH_MODE ?? null,
+        hasDevUserId: Boolean(process.env.DEV_USER_ID),
+        devUserId: maskValue(process.env.DEV_USER_ID),
+        hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
+        openAIModel: process.env.OPENAI_MODEL ?? null,
+        hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
+        supabaseUrlHost: process.env.SUPABASE_URL ? new URL(process.env.SUPABASE_URL).host : null,
+        hasSupabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+        supabaseServiceRoleRole: serviceRolePayload?.role ?? null,
+        supabaseServiceRoleRef: serviceRolePayload?.ref ?? null,
+        supabaseServiceRoleIssuer: serviceRolePayload?.iss ?? null,
+        hasGladiaKey: Boolean(process.env.GLADIA_API_KEY)
+      }
     });
   });
 
@@ -93,4 +131,33 @@ function resolveUserId(): string {
   }
 
   throw new ApiError(401, "unauthorized", "Authentication is required.");
+}
+
+function decodeJwtPayload(token: string | undefined): Record<string, unknown> | null {
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) {
+      return null;
+    }
+
+    return JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+function maskValue(value: string | undefined): string | null {
+  if (!value) {
+    return null;
+  }
+
+  if (value.length <= 8) {
+    return "***";
+  }
+
+  return `${value.slice(0, 4)}...${value.slice(-4)}`;
 }
