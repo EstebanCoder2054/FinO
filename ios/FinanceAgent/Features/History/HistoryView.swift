@@ -35,20 +35,16 @@ struct HistoryView: View {
         }
         .padding(.horizontal, 20)
         .padding(.top, 12)
-        .padding(.bottom, 32)
+        .padding(.bottom, 12)
+      }
+      .safeAreaInset(edge: .bottom) {
+        captureButton
       }
     }
     .navigationTitle("Fino")
     .navigationBarTitleDisplayMode(.inline)
     .toolbarColorScheme(.dark, for: .navigationBar)
     .toolbarBackground(.hidden, for: .navigationBar)
-    .toolbar {
-      ToolbarItem(placement: .primaryAction) {
-        Button(action: requestVoiceCapture) {
-          Image(systemName: "mic.fill")
-        }
-      }
-    }
     .sheet(item: $expenseToEdit) { expense in
       ExpenseFormView(expenseToEdit: expense)
     }
@@ -66,6 +62,41 @@ struct HistoryView: View {
       endPoint: .bottom
     )
     .ignoresSafeArea()
+  }
+
+  // MARK: - Capture button
+
+  /// Big, single entry point into voice capture — the dashboard is the
+  /// landing screen, so this is the only way in instead of a small toolbar
+  /// icon, per the "vistoso" demo ask.
+  private var captureButton: some View {
+    Button(action: requestVoiceCapture) {
+      HStack(spacing: 10) {
+        Image(systemName: "mic.fill")
+          .font(.title3.weight(.semibold))
+        Text("Registrar gasto")
+          .font(.headline)
+      }
+      .foregroundStyle(.black)
+      .frame(maxWidth: .infinity)
+      .padding(.vertical, 18)
+      .background(
+        LinearGradient(colors: [.mint, .teal], startPoint: .topLeading, endPoint: .bottomTrailing),
+        in: Capsule()
+      )
+      .shadow(color: .mint.opacity(0.35), radius: 20, y: 10)
+    }
+    .buttonStyle(.plain)
+    .padding(.horizontal, 20)
+    .padding(.top, 12)
+    .background(
+      LinearGradient(
+        colors: [.clear, Color(red: 0.02, green: 0.05, blue: 0.08).opacity(0.9)],
+        startPoint: .top,
+        endPoint: .center
+      )
+      .ignoresSafeArea()
+    )
   }
 
   // MARK: - Agent insight
@@ -499,7 +530,7 @@ struct HistoryView: View {
     expense.amount = remoteExpense.amount
     expense.currency = remoteExpense.currency
     expense.category = remoteExpense.category
-    expense.kind = .expense
+    expense.kind = remoteExpense.kind
     expense.expenseDescription = remoteExpense.description
     expense.createdAt = remoteExpense.createdAt
     expense.source = remoteExpense.source

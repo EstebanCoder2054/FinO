@@ -33,7 +33,7 @@ struct VoiceCaptureRootView: View {
             amount: capturedExpense.amount,
             currency: capturedExpense.currency,
             category: capturedExpense.category,
-            kind: .expense,
+            kind: capturedExpense.kind,
             expenseDescription: capturedExpense.description,
             createdAt: capturedExpense.createdAt,
             source: capturedExpense.source
@@ -241,26 +241,33 @@ struct VoiceCaptureRootView: View {
     }
   }
 
+  private var isSavedIncome: Bool {
+    viewModel.lastSavedExpense?.kind == .income
+  }
+
   private var title: String {
     switch viewModel.state {
     case .listening: return "Te escucho"
     case .transcribing: return "Perfecto"
     case .submitting: return "Enviando…"
-    case .success: return "¡Guardado!"
+    case .success: return isSavedIncome ? "¡Ingreso registrado!" : "¡Gasto registrado!"
     case .failure: return "Intentémoslo de nuevo"
     case .requestingPermission: return "Un momento"
-    case .idle: return "Registra un gasto"
+    case .idle: return "Registra un gasto o ingreso"
     }
   }
 
   private var detail: String {
     switch viewModel.state {
-    case .listening: return "Di qué compraste y cuánto pagaste."
-    case .transcribing: return "Ya casi enviamos tu gasto."
-    case .submitting: return "Estamos guardando tu gasto, espera un momento."
-    case .success: return "Tu gasto quedó registrado correctamente ✅."
+    case .listening: return "Di qué compraste y cuánto pagaste, o cuánto te pagaron."
+    case .transcribing: return "Ya casi enviamos tu movimiento."
+    case .submitting: return "Estamos guardando tu movimiento, espera un momento."
+    case .success:
+      return isSavedIncome
+        ? "Tu ingreso quedó registrado correctamente ✅."
+        : "Tu gasto quedó registrado correctamente ✅."
     case .requestingPermission: return "Activando el micrófono y el reconocimiento de voz."
-    case .idle: return "Por ejemplo: “Gasté cuarenta y cinco mil pesos en Uber”."
+    case .idle: return "Por ejemplo: “Gasté cuarenta y cinco mil pesos en Uber” o “Me pagaron 200 mil pesos”."
     case let .failure(failure): return failure.message
     }
   }

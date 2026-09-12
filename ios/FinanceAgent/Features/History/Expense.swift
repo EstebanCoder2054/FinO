@@ -62,7 +62,7 @@ final class Expense: Identifiable {
       amount: capturedExpense.amount,
       currency: capturedExpense.currency,
       category: capturedExpense.category,
-      kind: .expense,
+      kind: capturedExpense.kind,
       expenseDescription: capturedExpense.description,
       createdAt: capturedExpense.createdAt,
       source: capturedExpense.source
@@ -73,6 +73,6 @@ final class Expense: Identifiable {
 extension Expense {
   static let categories = [
     "Comida", "Transporte", "Hogar", "Entretenimiento", "Compras", "Salud",
-    "Sueldo", "Préstamo", "Arriendo", "Otros"
+    "Sueldo", "Préstamo", "Regalo", "Reembolso", "Otro ingreso", "Arriendo", "Otros"
   ]
 }

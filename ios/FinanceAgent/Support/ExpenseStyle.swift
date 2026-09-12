@@ -14,6 +14,9 @@ enum ExpenseStyle {
     "Salud": Color(hex: "d55181"),
     "Sueldo": Color(hex: "0ea5a5"),
     "Préstamo": Color(hex: "7c5cbf"),
+    "Regalo": Color(hex: "e11d48"),
+    "Reembolso": Color(hex: "0891b2"),
+    "Otro ingreso": Color(hex: "64748b"),
     "Arriendo": Color(hex: "a1662f"),
     "Otros": Color(hex: "008300")
   ]
@@ -27,6 +30,9 @@ enum ExpenseStyle {
     "Salud": "cross.case.fill",
     "Sueldo": "banknote.fill",
     "Préstamo": "hand.coin.fill",
+    "Regalo": "gift.fill",
+    "Reembolso": "arrow.uturn.left.circle.fill",
+    "Otro ingreso": "plus.circle.fill",
     "Arriendo": "key.fill",
     "Otros": "ellipsis.circle.fill"
   ]

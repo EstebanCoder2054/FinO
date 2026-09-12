@@ -2,6 +2,7 @@ import Foundation
 
 struct CapturedExpense: Equatable {
   let id: UUID
+  let kind: ExpenseKind
   let amount: Double?
   let currency: String
   let category: String
@@ -137,8 +138,8 @@ final class ExpenseAPIClient: @unchecked Sendable {
 
   /// Reverse of `RemoteExpense.displayCategory`. Lossy on purpose (several
   /// backend categories collapse into one local label); picks one
-  /// representative backend value per label. Local-only labels that have no
-  /// backend counterpart (income buckets like "Sueldo") fall back to "other".
+  /// representative backend value per label. "Arriendo" has no backend
+  /// counterpart (rent tracking stays local-only) and falls back to "other".
   private static func backendCategory(for displayCategory: String) -> String {
     switch displayCategory {
     case "Comida": return "restaurants"
@@ -147,6 +148,11 @@ final class ExpenseAPIClient: @unchecked Sendable {
     case "Entretenimiento": return "entertainment"
     case "Compras": return "shopping"
     case "Salud": return "health"
+    case "Sueldo": return "salary"
+    case "Préstamo": return "loan"
+    case "Regalo": return "gift"
+    case "Reembolso": return "refund"
+    case "Otro ingreso": return "other_income"
     default: return "other"
     }
   }
@@ -187,6 +193,7 @@ private struct ListExpensesResponse: Decodable {
 
 private struct RemoteExpense: Decodable {
   let id: UUID
+  let kind: ExpenseKind
   let amount: String?
   let currency: String
   let category: String
@@ -194,9 +201,29 @@ private struct RemoteExpense: Decodable {
   let source: String
   let createdAt: String
 
+  private enum CodingKeys: String, CodingKey {
+    case id, kind, amount, currency, category, description, source, createdAt
+  }
+
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    id = try container.decode(UUID.self, forKey: .id)
+    // The deployed API doesn't send `kind` yet (income support is still
+    // rolling out) — default to `.expense` instead of hard-failing decode
+    // on every row the current backend returns.
+    kind = try container.decodeIfPresent(ExpenseKind.self, forKey: .kind) ?? .expense
+    amount = try container.decodeIfPresent(String.self, forKey: .amount)
+    currency = try container.decode(String.self, forKey: .currency)
+    category = try container.decode(String.self, forKey: .category)
+    description = try container.decode(String.self, forKey: .description)
+    source = try container.decode(String.self, forKey: .source)
+    createdAt = try container.decode(String.self, forKey: .createdAt)
+  }
+
   var capturedExpense: CapturedExpense {
     CapturedExpense(
       id: id,
+      kind: kind,
       amount: amount.flatMap(Self.parseAmount),
       currency: currency,
       category: Self.displayCategory(for: category),
@@ -235,6 +262,16 @@ private struct RemoteExpense: Decodable {
       return "Compras"
     case "health":
       return "Salud"
+    case "salary":
+      return "Sueldo"
+    case "loan":
+      return "Préstamo"
+    case "gift":
+      return "Regalo"
+    case "refund":
+      return "Reembolso"
+    case "other_income":
+      return "Otro ingreso"
     default:
       return "Otros"
     }
