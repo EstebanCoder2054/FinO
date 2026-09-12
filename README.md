@@ -45,6 +45,13 @@ npm install
 npm run dev
 ```
 
+For backend type checking:
+
+```bash
+cd backend
+npm run typecheck
+```
+
 Copy `.env.example` to `.env` at the repo root or backend runtime environment and fill in the real values.
 
 Required backend secrets:
