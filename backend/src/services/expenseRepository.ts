@@ -55,6 +55,29 @@ export async function saveExpenseForUser(
   return mapExpenseRow(data);
 }
 
+export async function listExpensesForUser(userId: string, limit = 100): Promise<Expense[]> {
+  const { data, error } = await supabaseAdmin
+    .from("expenses")
+    .select("id, amount, currency, category, description, merchant, source, raw_input, confidence, created_at")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(limit)
+    .returns<ExpenseRow[]>();
+
+  if (error) {
+    console.error("Supabase expense list failed", {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint
+    });
+
+    throw new ApiError(503, "upstream_failure", "Could not load expenses right now.");
+  }
+
+  return data.map(mapExpenseRow);
+}
+
 function mapExpenseRow(row: ExpenseRow): Expense {
   return {
     id: row.id,

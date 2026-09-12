@@ -24,14 +24,17 @@ struct VoiceCaptureRootView: View {
       .navigationBarHidden(true)
     }
     .onAppear {
-      viewModel.onExpenseCaptured = { transcript in
+      viewModel.onExpenseCaptured = { capturedExpense in
         modelContext.insert(
           Expense(
-            amount: Self.extractAmount(from: transcript),
-            category: Self.extractCategory(from: transcript),
-            kind: Self.extractKind(from: transcript),
-            expenseDescription: transcript,
-            source: "voice"
+            id: capturedExpense.id,
+            amount: capturedExpense.amount,
+            currency: capturedExpense.currency,
+            category: capturedExpense.category,
+            kind: .expense,
+            expenseDescription: capturedExpense.description,
+            createdAt: capturedExpense.createdAt,
+            source: capturedExpense.source
           )
         )
       }
@@ -40,40 +43,6 @@ struct VoiceCaptureRootView: View {
     .onChange(of: voiceCaptureRequested) { _, _ in
       startRequestedCaptureIfNeeded()
     }
-  }
-
-  private static func extractAmount(from text: String) -> Double? {
-    guard let range = text.range(of: #"\d[\d.,]*"#, options: .regularExpression) else { return nil }
-    let normalized = text[range]
-      .replacingOccurrences(of: ".", with: "")
-      .replacingOccurrences(of: ",", with: ".")
-    return Double(normalized)
-  }
-
-  private static let incomeKeywords = [
-    "ingreso", "ingresé", "me pagaron", "me pagó", "recibí", "cobré", "gané",
-    "salario", "sueldo", "me depositaron", "depositaron", "abonaron", "me consignaron"
-  ]
-
-  private static func extractKind(from text: String) -> ExpenseKind {
-    let lowered = text.lowercased()
-    return incomeKeywords.contains { lowered.contains($0) } ? .income : .expense
-  }
-
-  private static let categoryKeywords: [String: [String]] = [
-    "Comida": ["restaurante", "comida", "almuerzo", "desayuno", "cena", "mercado", "supermercado", "domicilio"],
-    "Transporte": ["uber", "taxi", "bus", "transporte", "gasolina", "parqueadero", "peaje", "metro", "didi"],
-    "Hogar": ["arriendo", "hogar", "servicios", "luz", "agua", "internet", "gas", "administración"],
-    "Entretenimiento": ["cine", "netflix", "entretenimiento", "salida", "bar", "fiesta", "streaming", "juego"],
-    "Salud": ["farmacia", "médico", "salud", "droguería", "eps", "medicina", "consulta"]
-  ]
-
-  private static func extractCategory(from text: String) -> String {
-    let lowered = text.lowercased()
-    for (category, keywords) in categoryKeywords where keywords.contains(where: lowered.contains) {
-      return category
-    }
-    return "Otros"
   }
 
   private var backgroundGradient: some View {

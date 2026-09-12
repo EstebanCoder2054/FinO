@@ -4,7 +4,10 @@ Base URL is environment-specific and configured in iOS build settings.
 
 ## Authentication
 
-All application data endpoints require:
+For the hackathon MVP, production currently runs with backend auth disabled.
+The iOS app does not send an auth token yet.
+
+When auth is enabled again, all application data endpoints should require:
 
 ```http
 Authorization: Bearer <supabase-access-token>
@@ -105,3 +108,27 @@ Common statuses:
 - `429`: rate limited
 - `500`: unexpected backend failure
 - `502` or `503`: upstream OpenAI/Supabase failure
+
+## GET /api/expenses
+
+Returns the latest saved expenses for the MVP user.
+
+### Success Response
+
+```json
+{
+  "success": true,
+  "expenses": [
+    {
+      "id": "uuid",
+      "amount": "27000",
+      "currency": "COP",
+      "category": "transportation",
+      "description": "taxi",
+      "merchant": null,
+      "source": "ios_voice",
+      "createdAt": "2026-09-12T19:31:25.207839+00:00"
+    }
+  ]
+}
+```

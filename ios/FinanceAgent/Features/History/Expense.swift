@@ -55,6 +55,19 @@ final class Expense: Identifiable {
     self.createdAt = createdAt
     self.source = source
   }
+
+  convenience init(_ capturedExpense: CapturedExpense) {
+    self.init(
+      id: capturedExpense.id,
+      amount: capturedExpense.amount,
+      currency: capturedExpense.currency,
+      category: capturedExpense.category,
+      kind: .expense,
+      expenseDescription: capturedExpense.description,
+      createdAt: capturedExpense.createdAt,
+      source: capturedExpense.source
+    )
+  }
 }
 
 extension Expense {

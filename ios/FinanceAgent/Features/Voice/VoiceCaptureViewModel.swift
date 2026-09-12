@@ -14,12 +14,13 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
   /// Invoked with the finalized transcript once a submission succeeds, so the
   /// view layer can persist it (e.g. to SwiftData) without this view model
   /// knowing about storage.
-  var onExpenseCaptured: ((String) -> Void)?
+  var onExpenseCaptured: ((CapturedExpense) -> Void)?
 
   private var audioEngine = AVAudioEngine()
   private let speechRecognizer = VoiceCaptureViewModel.makeSpeechRecognizer()
   private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
   private var recognitionTask: SFSpeechRecognitionTask?
+  private let apiClient = ExpenseAPIClient.shared
 
   func beginCapture() {
     stopListening()
@@ -77,14 +78,17 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
     state = VoiceCaptureReducer.reduce(state, event: .submissionStarted)
     let text = transcript
     Task {
-      // Placeholder: no backend wired up yet (POST /api/expenses pending).
-      // Swap this simulated delay for the real network call once that's ready;
-      // the submitting/failure/retry states above stay the same.
-      try? await Task.sleep(nanoseconds: 700_000_000)
-      guard transcript == text else { return }
-      onExpenseCaptured?(text)
-      transcript = ""
-      state = VoiceCaptureReducer.reduce(state, event: .submissionSucceeded)
+      do {
+        let expense = try await apiClient.createExpense(from: text)
+        guard transcript == text else { return }
+        onExpenseCaptured?(expense)
+        transcript = ""
+        state = VoiceCaptureReducer.reduce(state, event: .submissionSucceeded)
+      } catch {
+        voiceCaptureLog.error("expense submission failed: \(String(describing: error), privacy: .public)")
+        guard transcript == text else { return }
+        state = VoiceCaptureReducer.reduce(state, event: .submissionFailed)
+      }
     }
   }
 

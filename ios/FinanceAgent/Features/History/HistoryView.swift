@@ -9,6 +9,7 @@ struct HistoryView: View {
   @Query(sort: \Expense.createdAt, order: .reverse) private var expenses: [Expense]
 
   @State private var expenseToEdit: Expense?
+  @State private var isSyncing = false
 
   var body: some View {
     ZStack {
@@ -51,6 +52,9 @@ struct HistoryView: View {
     }
     .sheet(item: $expenseToEdit) { expense in
       ExpenseFormView(expenseToEdit: expense)
+    }
+    .task {
+      await syncExpenses()
     }
   }
 
@@ -413,18 +417,10 @@ struct HistoryView: View {
       }
 
       if expenses.isEmpty {
-        VStack(alignment: .leading, spacing: 12) {
-          Text("Aún no registras nada. Habla con Fino para agregar tu primer movimiento.")
-            .font(.callout)
-            .foregroundStyle(.white.opacity(0.5))
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-          #if DEBUG
-          Button("Cargar datos de ejemplo", action: loadSampleData)
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(ExpenseStyle.incomeColor)
-          #endif
-        }
+        Text("Aún no registras nada. Habla con Fino para agregar tu primer movimiento.")
+          .font(.callout)
+          .foregroundStyle(.white.opacity(0.5))
+          .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
       } else {
@@ -461,43 +457,34 @@ struct HistoryView: View {
     dismiss()
   }
 
-  #if DEBUG
-  /// Demo-only seed so the dashboard (insight, donut, trend) has something to
-  /// show without needing two weeks of real usage before a hackathon demo.
-  private func loadSampleData() {
-    let calendar = Calendar.current
-    let samples: [(description: String, category: String, amount: Double, kind: ExpenseKind, daysAgo: Int)] = [
-      ("Salario", "Otros", 2_200_000, .income, 12),
-      ("Almuerzo Rappi", "Comida", 28_000, .expense, 1),
-      ("Mercado D1", "Comida", 65_000, .expense, 2),
-      ("Uber al trabajo", "Transporte", 15_000, .expense, 1),
-      ("DiDi al centro", "Transporte", 12_000, .expense, 3),
-      ("Arriendo", "Hogar", 850_000, .expense, 5),
-      ("Netflix", "Entretenimiento", 32_900, .expense, 4),
-      ("Cine", "Entretenimiento", 45_000, .expense, 6),
-      ("Droguería", "Salud", 38_000, .expense, 2),
-      ("Café", "Otros", 8_000, .expense, 1),
-      ("Almuerzo Rappi", "Comida", 24_000, .expense, 8),
-      ("Mercado Éxito", "Comida", 72_000, .expense, 9),
-      ("Uber", "Transporte", 18_000, .expense, 8),
-      ("Gimnasio", "Salud", 60_000, .expense, 10)
-    ]
+  private func syncExpenses() async {
+    guard !isSyncing else { return }
+    isSyncing = true
+    defer { isSyncing = false }
 
-    for sample in samples {
-      let date = calendar.date(byAdding: .day, value: -sample.daysAgo, to: .now) ?? .now
-      modelContext.insert(
-        Expense(
-          amount: sample.amount,
-          category: sample.category,
-          kind: sample.kind,
-          expenseDescription: sample.description,
-          createdAt: date,
-          source: "demo"
-        )
-      )
+    do {
+      let remoteExpenses = try await ExpenseAPIClient.shared.listExpenses()
+      for remoteExpense in remoteExpenses {
+        if let existingExpense = expenses.first(where: { $0.id == remoteExpense.id }) {
+          apply(remoteExpense, to: existingExpense)
+        } else {
+          modelContext.insert(Expense(remoteExpense))
+        }
+      }
+    } catch {
+      // The local history remains usable if the network is unavailable.
     }
   }
-  #endif
+
+  private func apply(_ remoteExpense: CapturedExpense, to expense: Expense) {
+    expense.amount = remoteExpense.amount
+    expense.currency = remoteExpense.currency
+    expense.category = remoteExpense.category
+    expense.kind = .expense
+    expense.expenseDescription = remoteExpense.description
+    expense.createdAt = remoteExpense.createdAt
+    expense.source = remoteExpense.source
+  }
 }
 
 private struct ExpenseRow: View {

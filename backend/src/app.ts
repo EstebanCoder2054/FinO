@@ -4,7 +4,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { randomUUID } from "node:crypto";
 import { ApiError, toErrorResponse } from "./api/errors.js";
 import { getOptionalEnv, getRequiredEnv } from "./config/env.js";
-import { saveExpenseForUser } from "./services/expenseRepository.js";
+import { listExpensesForUser, saveExpenseForUser } from "./services/expenseRepository.js";
 import { processExpenseInput } from "./services/expenseProcessor.js";
 import { validateCreateExpenseRequest } from "./validation/expenseRequest.js";
 
@@ -83,6 +83,18 @@ export function createApp() {
     return c.json(getRuntimeDiagnostics());
   });
 
+  app.get("/expenses", async (c) => {
+    return listExpenses(c);
+  });
+
+  app.get("/api/expenses", async (c) => {
+    return listExpenses(c);
+  });
+
+  app.get("/api/index/expenses", async (c) => {
+    return listExpenses(c);
+  });
+
   app.post("/expenses", async (c) => {
     return createExpense(c);
   });
@@ -101,6 +113,25 @@ export function createApp() {
   });
 
   return app;
+}
+
+async function listExpenses(c: Context<AppBindings>) {
+  const userId = resolveUserId();
+  const expenses = await listExpensesForUser(userId);
+
+  return c.json({
+    success: true,
+    expenses: expenses.map((expense) => ({
+      id: expense.id,
+      amount: expense.amount,
+      currency: expense.currency,
+      category: expense.category,
+      description: expense.description,
+      merchant: expense.merchant,
+      source: expense.source,
+      createdAt: expense.createdAt
+    }))
+  });
 }
 
 async function createExpense(c: Context<AppBindings>) {

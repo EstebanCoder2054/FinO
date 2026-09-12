@@ -10,6 +10,7 @@
 		06D7342F2ED1CFF0B376DB51 /* ExpenseStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D6A4644918304EE122DB3A /* ExpenseStyle.swift */; };
 		0E7FC2E8386A3F39BD0423D4 /* VoiceCaptureRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12A404740DB8473746F61B8 /* VoiceCaptureRootView.swift */; };
 		10FCA92B9724073886424D89 /* VoiceCaptureRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */; };
+		1BB6348D203C4AF4A9C82A1E /* ExpenseAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4760B9C6F8481D9C4DEBD4 /* ExpenseAPIClient.swift */; };
 		231C8D25D81E1F2207E21975 /* VoiceCaptureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39484D526FB37B3E18B1FEEB /* VoiceCaptureViewModel.swift */; };
 		3401E38E081A886BF63C998B /* VoiceWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */; };
 		4A418526C9DE8D99EDB5615D /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E0B75C29E044706EBAB86 /* Color+Hex.swift */; };
@@ -72,6 +73,7 @@
 		510B899BF6061FBBB4BEAEDD /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		544E0F2D96ED0C1675A9431F /* FinanceAgentWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinanceAgentWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6A9BFDF9EE6C9DDA3DF56B /* FinanceAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinanceAgent.entitlements; sourceTree = "<group>"; };
+		6F4760B9C6F8481D9C4DEBD4 /* ExpenseAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseAPIClient.swift; sourceTree = "<group>"; };
 		7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceWaveformView.swift; sourceTree = "<group>"; };
 		7E60A1BF9C7ADD40BDE75DD3 /* FinanceAgentWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinanceAgentWidget.entitlements; sourceTree = "<group>"; };
 		8E3BA351C7A0FF6C62A4582F /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,14 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		9E6DE34F251D4C8B9E7B638D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				6F4760B9C6F8481D9C4DEBD4 /* ExpenseAPIClient.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		B1A777F386C56AE34B0FF95A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +184,7 @@
 				A20335D4DD2AAE2B615D4E3F /* Info.plist */,
 				BE5871A09073FE646ED28EE1 /* README.md */,
 				F77D21E4D4A3F452D904B958 /* Features */,
+				9E6DE34F251D4C8B9E7B638D /* Networking */,
 				3192C9EC07B21BBC32AF57F5 /* Support */,
 			);
 			path = FinanceAgent;
@@ -339,6 +350,7 @@
 			files = (
 				4A418526C9DE8D99EDB5615D /* Color+Hex.swift in Sources */,
 				EDDAFC8B65D9C05C647AA3CB /* Expense.swift in Sources */,
+				1BB6348D203C4AF4A9C82A1E /* ExpenseAPIClient.swift in Sources */,
 				950802F9F51B5CEEC1EE6FDC /* ExpenseFormView.swift in Sources */,
 				06D7342F2ED1CFF0B376DB51 /* ExpenseStyle.swift in Sources */,
 				568FBAF19333F7166DC68C12 /* FinanceAgentApp.swift in Sources */,
