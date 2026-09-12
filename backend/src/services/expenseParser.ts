@@ -1,5 +1,5 @@
-import { categorizeExpense } from "../tools/categorizeExpense.js";
-import type { CreateExpenseInput } from "../types/expense.js";
+import { categorizeExpense, categorizeIncome } from "../tools/categorizeExpense.js";
+import type { CreateExpenseInput, ExpenseKind } from "../types/expense.js";
 import { getOptionalEnv } from "../config/env.js";
 
 type ParseExpenseResult =
@@ -27,6 +27,42 @@ const numberWords: Record<string, number> = {
   diez: 10
 };
 
+/// Digits-only magnitude pattern ("200 mil", "2.5 millones"). Unambiguous
+/// by construction — unlike word-spelled numbers ("cuarenta y cinco mil"),
+/// there's no risk of only catching the last word before "mil" — so the
+/// LLM-backed agent (`expenseAgent.ts`) uses this as a cross-check/override
+/// on its own amount extraction, which has been seen dropping the magnitude
+/// word and returning e.g. "200" for "200 mil pesos".
+export function extractDigitMagnitudeAmount(input: string): string | null {
+  const lower = input.toLowerCase();
+
+  const millionMatch = lower.match(/\b(\d+(?:[.,]\d+)?)\s+mill[oó]n(?:es)?\b/);
+  if (millionMatch) {
+    const value = Number(millionMatch[1].replace(",", "."));
+    return Number.isFinite(value) && value > 0 ? String(value * 1_000_000) : null;
+  }
+
+  const milMatch = lower.match(/\b(\d+(?:[.,]\d+)?)\s+mil\b/);
+  if (milMatch) {
+    const value = Number(milMatch[1].replace(",", "."));
+    return Number.isFinite(value) && value > 0 ? String(value * 1000) : null;
+  }
+
+  return null;
+}
+
+/// Matches the Colombian Spanish phrases this feature was asked to
+/// recognize (money coming in, not going out). Used only by this
+/// deterministic fallback — the LLM-backed agent gets the same guidance as
+/// prompt instructions, which handle ambiguous cases (like "adquirí") with
+/// more judgment than a regex can.
+const incomePattern =
+  /\b(me pagaron|me pag[oó]|me ingres(?:aron|[oó])|me deposit(?:aron|[oó])|me dieron|me prestaron|me regalaron|me devolvieron|recib[ií]|gan[eé]|adquir[ií])\b/;
+
+function extractKind(input: string): ExpenseKind {
+  return incomePattern.test(input) ? "income" : "expense";
+}
+
 export function parseExpenseInput(rawInput: string): ParseExpenseResult {
   const input = rawInput.trim();
   const lower = input.toLowerCase();
@@ -39,17 +75,16 @@ export function parseExpenseInput(rawInput: string): ParseExpenseResult {
     };
   }
 
+  const kind = extractKind(lower);
   const merchant = extractMerchant(input);
   const description = extractDescription(input, merchant);
-  const categoryResult = categorizeExpense({
-    description,
-    merchant,
-    amount
-  });
+  const categoryResult =
+    kind === "income" ? categorizeIncome({ description, merchant }) : categorizeExpense({ description, merchant, amount });
 
   return {
     status: "ok",
     expense: {
+      kind,
       amount,
       currency: extractCurrency(lower),
       category: categoryResult.category,

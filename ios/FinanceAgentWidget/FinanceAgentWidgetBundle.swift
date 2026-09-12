@@ -5,5 +5,6 @@ import SwiftUI
 struct FinanceAgentWidgetBundle: WidgetBundle {
   var body: some Widget {
     AddExpenseControl()
+    FinoBalanceWidget()
   }
 }

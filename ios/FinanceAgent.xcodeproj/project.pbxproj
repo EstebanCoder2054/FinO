@@ -15,6 +15,7 @@
 		3401E38E081A886BF63C998B /* VoiceWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */; };
 		4A418526C9DE8D99EDB5615D /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E0B75C29E044706EBAB86 /* Color+Hex.swift */; };
 		568FBAF19333F7166DC68C12 /* FinanceAgentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3D6F5C3AC1F5F6DE5513AC /* FinanceAgentApp.swift */; };
+		387C9925EC09B48ABA8D34CE /* FinoBalanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D854DBB4B30B246389581C /* FinoBalanceWidget.swift */; };
 		5F0095BC076D297A88855304 /* FinanceAgentWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FE1003FF377C245D2916D8 /* FinanceAgentWidgetBundle.swift */; };
 		6C6D0A4A1B3C08EEF328A91E /* FinanceAgentWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 544E0F2D96ED0C1675A9431F /* FinanceAgentWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		75247382C189099A2DC6A0A6 /* StartExpenseCaptureIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9BC231A7DF58D1DE4A4F45 /* StartExpenseCaptureIntent.swift */; };
@@ -77,6 +78,7 @@
 		7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceWaveformView.swift; sourceTree = "<group>"; };
 		7E60A1BF9C7ADD40BDE75DD3 /* FinanceAgentWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinanceAgentWidget.entitlements; sourceTree = "<group>"; };
 		8E3BA351C7A0FF6C62A4582F /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
+		32D854DBB4B30B246389581C /* FinoBalanceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinoBalanceWidget.swift; sourceTree = "<group>"; };
 		90FE1003FF377C245D2916D8 /* FinanceAgentWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceAgentWidgetBundle.swift; sourceTree = "<group>"; };
 		94EC981660C89A217D91371A /* FinanceAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinanceAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A20335D4DD2AAE2B615D4E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				A82397083CD83BE3BA7FA840 /* AddExpenseControl.swift */,
 				7E60A1BF9C7ADD40BDE75DD3 /* FinanceAgentWidget.entitlements */,
 				90FE1003FF377C245D2916D8 /* FinanceAgentWidgetBundle.swift */,
+				32D854DBB4B30B246389581C /* FinoBalanceWidget.swift */,
 				CFAD0E67841C253BB2E35E8C /* Info.plist */,
 				DC9301071F9039482746DA43 /* README.md */,
 			);
@@ -339,6 +342,7 @@
 			files = (
 				7A564C78A7328FACEA29F29B /* AddExpenseControl.swift in Sources */,
 				5F0095BC076D297A88855304 /* FinanceAgentWidgetBundle.swift in Sources */,
+				387C9925EC09B48ABA8D34CE /* FinoBalanceWidget.swift in Sources */,
 				8D041DF5E614EBF02E3C46CB /* StartExpenseCaptureIntent.swift in Sources */,
 				B102FBED027B1FF7AD448DD6 /* VoiceCaptureRoute.swift in Sources */,
 			);

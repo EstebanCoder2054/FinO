@@ -32,3 +32,27 @@ export function categorizeExpense(input: CategorizeExpenseInput): CategorizeExpe
     confidence: match ? 0.9 : 0.5
   };
 }
+
+type CategorizeIncomeInput = {
+  description: string;
+  merchant: string | null;
+};
+
+const incomeKeywordCategoryMap: Array<{ keywords: string[]; category: ExpenseCategory }> = [
+  { keywords: ["sueldo", "salario", "n[oó]mina", "pago mensual", "me pagaron", "me pag[oó]"], category: "salary" },
+  { keywords: ["pr[eé]stamo", "me prestaron"], category: "loan" },
+  { keywords: ["regalo", "me regalaron"], category: "gift" },
+  { keywords: ["reembolso", "devoluci[oó]n", "me devolvieron"], category: "refund" }
+];
+
+export function categorizeIncome(input: CategorizeIncomeInput): CategorizeExpenseResult {
+  const searchText = `${input.description} ${input.merchant ?? ""}`.toLowerCase();
+  const match = incomeKeywordCategoryMap.find(({ keywords }) =>
+    keywords.some((keyword) => new RegExp(keyword).test(searchText))
+  );
+
+  return {
+    category: match?.category ?? "other_income",
+    confidence: match ? 0.9 : 0.5
+  };
+}

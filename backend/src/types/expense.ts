@@ -8,10 +8,20 @@ export const expenseCategories = [
   "health",
   "subscriptions",
   "travel",
-  "other"
+  "other",
+  // Income-side categories (kind === "income")
+  "salary",
+  "loan",
+  "gift",
+  "refund",
+  "other_income"
 ] as const;
 
 export type ExpenseCategory = (typeof expenseCategories)[number];
+
+export const expenseKinds = ["expense", "income"] as const;
+
+export type ExpenseKind = (typeof expenseKinds)[number];
 
 export const supportedCurrencies = ["COP", "USD", "EUR"] as const;
 
@@ -23,6 +33,7 @@ export type ExpenseSource = (typeof expenseSources)[number];
 
 export type Expense = {
   id: string;
+  kind: ExpenseKind;
   amount: string;
   currency: SupportedCurrency;
   category: ExpenseCategory;
@@ -35,6 +46,7 @@ export type Expense = {
 };
 
 export type CreateExpenseInput = {
+  kind: ExpenseKind;
   amount: string;
   currency: SupportedCurrency;
   category: ExpenseCategory;

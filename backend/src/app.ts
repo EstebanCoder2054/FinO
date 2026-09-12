@@ -156,6 +156,7 @@ async function listExpenses(c: Context<AppBindings>) {
     success: true,
     expenses: expenses.map((expense) => ({
       id: expense.id,
+      kind: expense.kind,
       amount: expense.amount,
       currency: expense.currency,
       category: expense.category,
@@ -190,9 +191,15 @@ async function createExpense(c: Context<AppBindings>) {
       success: true,
       expense: {
         id: expense.id,
+        // The live schema can't persist kind or income categories yet
+        // (see expenseRepository.ts), so `expense.kind`/`expense.category`
+        // here are DB placeholders. Return what the agent actually
+        // classified instead — right for this response, even though a
+        // later GET /api/expenses won't remember it.
+        kind: parsed.expense.kind,
         amount: expense.amount,
         currency: expense.currency,
-        category: expense.category,
+        category: parsed.expense.category,
         description: expense.description,
         merchant: expense.merchant,
         source: expense.source,
@@ -213,6 +220,7 @@ async function updateExpense(c: Context<AppBindings>) {
     success: true,
     expense: {
       id: expense.id,
+      kind: expense.kind,
       amount: expense.amount,
       currency: expense.currency,
       category: expense.category,

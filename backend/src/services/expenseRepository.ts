@@ -1,6 +1,8 @@
 import { ApiError } from "../api/errors.js";
 import { supabaseAdmin } from "../db/supabase.js";
-import type { CreateExpenseInput, Expense, UpdateExpenseInput } from "../types/expense.js";
+import type { CreateExpenseInput, Expense, ExpenseCategory, UpdateExpenseInput } from "../types/expense.js";
+
+const expenseColumns = "id, amount, currency, category, description, merchant, source, raw_input, confidence, created_at";
 
 type ExpenseRow = {
   id: string;
@@ -15,6 +17,32 @@ type ExpenseRow = {
   created_at: string;
 };
 
+/**
+ * The `expenses` table doesn't have a `kind` column or the income-side
+ * category enum values yet (needs a migration that hasn't been run against
+ * the live database). Until then, this maps anything the schema can't
+ * store to a value it can, so voice capture can classify income today
+ * without every insert/update failing against the live enum. The caller
+ * (app.ts) still returns the true kind/category in the API response from
+ * what it already computed — this only affects what gets persisted.
+ */
+const liveCategories = new Set<ExpenseCategory>([
+  "groceries",
+  "restaurants",
+  "transportation",
+  "shopping",
+  "entertainment",
+  "utilities",
+  "health",
+  "subscriptions",
+  "travel",
+  "other"
+]);
+
+function toLiveCategory(category: ExpenseCategory): ExpenseCategory {
+  return liveCategories.has(category) ? category : "other";
+}
+
 export async function saveExpenseForUser(
   userId: string,
   input: CreateExpenseInput,
@@ -26,7 +54,7 @@ export async function saveExpenseForUser(
       user_id: userId,
       amount: input.amount,
       currency: input.currency,
-      category: input.category,
+      category: toLiveCategory(input.category),
       description: input.description,
       merchant: input.merchant,
       source: input.source,
@@ -34,7 +62,7 @@ export async function saveExpenseForUser(
       confidence: input.confidence,
       idempotency_key: idempotencyKey ?? null
     })
-    .select("id, amount, currency, category, description, merchant, source, raw_input, confidence, created_at")
+    .select(expenseColumns)
     .single<ExpenseRow>();
 
   if (error) {
@@ -58,7 +86,7 @@ export async function saveExpenseForUser(
 export async function listExpensesForUser(userId: string, limit = 100): Promise<Expense[]> {
   const { data, error } = await supabaseAdmin
     .from("expenses")
-    .select("id, amount, currency, category, description, merchant, source, raw_input, confidence, created_at")
+    .select(expenseColumns)
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(limit)
@@ -86,7 +114,7 @@ export async function updateExpenseForUser(
   const row: Record<string, unknown> = {};
   if (patch.amount !== undefined) row.amount = patch.amount;
   if (patch.currency !== undefined) row.currency = patch.currency;
-  if (patch.category !== undefined) row.category = patch.category;
+  if (patch.category !== undefined) row.category = toLiveCategory(patch.category);
   if (patch.description !== undefined) row.description = patch.description;
   if (patch.merchant !== undefined) row.merchant = patch.merchant;
 
@@ -95,7 +123,7 @@ export async function updateExpenseForUser(
     .update(row)
     .eq("id", id)
     .eq("user_id", userId)
-    .select("id, amount, currency, category, description, merchant, source, raw_input, confidence, created_at")
+    .select(expenseColumns)
     .single<ExpenseRow>();
 
   if (error) {
@@ -144,6 +172,11 @@ export async function deleteExpenseForUser(userId: string, id: string): Promise<
 function mapExpenseRow(row: ExpenseRow): Expense {
   return {
     id: row.id,
+    // The live schema has no `kind` column yet — see the note above
+    // `liveCategories`. Rows read back from the database can't say whether
+    // they were income, so this defaults to "expense" the same way the iOS
+    // client already does when the field is missing.
+    kind: "expense",
     amount: String(row.amount),
     currency: row.currency,
     category: row.category,
