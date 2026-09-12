@@ -1,10 +1,5 @@
 # FinanceAgentWidget
 
-Widget extension placeholder.
+Widget extension containing the `Registrar gasto` Control Center button. It invokes a shared `OpenIntent`, records the capture request in the app group, and opens the native voice-capture flow.
 
-Expected responsibilities:
-
-- WidgetKit Control for Add Expense
-- App Intent entry point
-- handoff into the native expense capture flow
-- no backend secrets
+The extension contains no backend credentials and never calls Supabase directly.

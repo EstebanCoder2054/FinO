@@ -1,0 +1,613 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0E7FC2E8386A3F39BD0423D4 /* VoiceCaptureRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12A404740DB8473746F61B8 /* VoiceCaptureRootView.swift */; };
+		10FCA92B9724073886424D89 /* VoiceCaptureRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */; };
+		231C8D25D81E1F2207E21975 /* VoiceCaptureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39484D526FB37B3E18B1FEEB /* VoiceCaptureViewModel.swift */; };
+		3401E38E081A886BF63C998B /* VoiceWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */; };
+		568FBAF19333F7166DC68C12 /* FinanceAgentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3D6F5C3AC1F5F6DE5513AC /* FinanceAgentApp.swift */; };
+		5F0095BC076D297A88855304 /* FinanceAgentWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FE1003FF377C245D2916D8 /* FinanceAgentWidgetBundle.swift */; };
+		6C6D0A4A1B3C08EEF328A91E /* FinanceAgentWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 544E0F2D96ED0C1675A9431F /* FinanceAgentWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		75247382C189099A2DC6A0A6 /* StartExpenseCaptureIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9BC231A7DF58D1DE4A4F45 /* StartExpenseCaptureIntent.swift */; };
+		7A564C78A7328FACEA29F29B /* AddExpenseControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82397083CD83BE3BA7FA840 /* AddExpenseControl.swift */; };
+		7F60A781D26193E3293F1772 /* VoiceCaptureReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ADAB1BDE1A00FEA8C27371 /* VoiceCaptureReducerTests.swift */; };
+		8D041DF5E614EBF02E3C46CB /* StartExpenseCaptureIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9BC231A7DF58D1DE4A4F45 /* StartExpenseCaptureIntent.swift */; };
+		9D6447FE2D21919D305ADCC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BE5871A09073FE646ED28EE1 /* README.md */; };
+		B102FBED027B1FF7AD448DD6 /* VoiceCaptureRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */; };
+		C8665B25832A81E09D971C09 /* VoiceCaptureState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DE85AA9DB59DBEEA88ACF6 /* VoiceCaptureState.swift */; };
+		CE4CAAD924F87686EBFA6991 /* PulsingMicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239903E90194F2145DA6236A /* PulsingMicButton.swift */; };
+		EE012383094E9593B0B6BF3F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DC9301071F9039482746DA43 /* README.md */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0FE0AD81FA8B6BED44C1F35E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0D158A3D97BFBD8D5032B939 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB4B37F13D7C69A92C455F10;
+			remoteInfo = FinanceAgentWidget;
+		};
+		D55CB14516A5B602258DCF33 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0D158A3D97BFBD8D5032B939 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3B886377B19958922C16A02;
+			remoteInfo = FinanceAgent;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0CB9B1ACA8488B3E9FB476A4 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6C6D0A4A1B3C08EEF328A91E /* FinanceAgentWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		239903E90194F2145DA6236A /* PulsingMicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulsingMicButton.swift; sourceTree = "<group>"; };
+		287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureRoute.swift; sourceTree = "<group>"; };
+		39484D526FB37B3E18B1FEEB /* VoiceCaptureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureViewModel.swift; sourceTree = "<group>"; };
+		3B58C670C01C094AF26EFC5F /* FinanceAgentTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FinanceAgentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		544E0F2D96ED0C1675A9431F /* FinanceAgentWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FinanceAgentWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B6A9BFDF9EE6C9DDA3DF56B /* FinanceAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinanceAgent.entitlements; sourceTree = "<group>"; };
+		7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceWaveformView.swift; sourceTree = "<group>"; };
+		7E60A1BF9C7ADD40BDE75DD3 /* FinanceAgentWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinanceAgentWidget.entitlements; sourceTree = "<group>"; };
+		90FE1003FF377C245D2916D8 /* FinanceAgentWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceAgentWidgetBundle.swift; sourceTree = "<group>"; };
+		94EC981660C89A217D91371A /* FinanceAgent.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FinanceAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20335D4DD2AAE2B615D4E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A5DE85AA9DB59DBEEA88ACF6 /* VoiceCaptureState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureState.swift; sourceTree = "<group>"; };
+		A82397083CD83BE3BA7FA840 /* AddExpenseControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseControl.swift; sourceTree = "<group>"; };
+		BE5871A09073FE646ED28EE1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		CD3D6F5C3AC1F5F6DE5513AC /* FinanceAgentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceAgentApp.swift; sourceTree = "<group>"; };
+		CFAD0E67841C253BB2E35E8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D12A404740DB8473746F61B8 /* VoiceCaptureRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureRootView.swift; sourceTree = "<group>"; };
+		D7ADAB1BDE1A00FEA8C27371 /* VoiceCaptureReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureReducerTests.swift; sourceTree = "<group>"; };
+		DC9301071F9039482746DA43 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		DE9BC231A7DF58D1DE4A4F45 /* StartExpenseCaptureIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartExpenseCaptureIntent.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1D35FB2F3C08B96ED4172304 /* FinanceAgentTests */ = {
+			isa = PBXGroup;
+			children = (
+				D7ADAB1BDE1A00FEA8C27371 /* VoiceCaptureReducerTests.swift */,
+			);
+			path = FinanceAgentTests;
+			sourceTree = "<group>";
+		};
+		30615AFB36D6C0CD29364100 /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */,
+			);
+			path = Routing;
+			sourceTree = "<group>";
+		};
+		364ABABF3CC84AE87C0A69BE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				94EC981660C89A217D91371A /* FinanceAgent.app */,
+				3B58C670C01C094AF26EFC5F /* FinanceAgentTests.xctest */,
+				544E0F2D96ED0C1675A9431F /* FinanceAgentWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7848FB998A9581B282D70C75 /* AppIntents */ = {
+			isa = PBXGroup;
+			children = (
+				DE9BC231A7DF58D1DE4A4F45 /* StartExpenseCaptureIntent.swift */,
+			);
+			path = AppIntents;
+			sourceTree = "<group>";
+		};
+		8F2D404A48B5B5E5BCC956BF = {
+			isa = PBXGroup;
+			children = (
+				BB9426C56FCC8288C45F3197 /* FinanceAgent */,
+				1D35FB2F3C08B96ED4172304 /* FinanceAgentTests */,
+				DB15E17E96A0955664F7AAB5 /* FinanceAgentWidget */,
+				B1A777F386C56AE34B0FF95A /* Shared */,
+				364ABABF3CC84AE87C0A69BE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B1A777F386C56AE34B0FF95A /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				7848FB998A9581B282D70C75 /* AppIntents */,
+				30615AFB36D6C0CD29364100 /* Routing */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		BB9426C56FCC8288C45F3197 /* FinanceAgent */ = {
+			isa = PBXGroup;
+			children = (
+				5B6A9BFDF9EE6C9DDA3DF56B /* FinanceAgent.entitlements */,
+				CD3D6F5C3AC1F5F6DE5513AC /* FinanceAgentApp.swift */,
+				A20335D4DD2AAE2B615D4E3F /* Info.plist */,
+				BE5871A09073FE646ED28EE1 /* README.md */,
+				F77D21E4D4A3F452D904B958 /* Features */,
+			);
+			path = FinanceAgent;
+			sourceTree = "<group>";
+		};
+		D3BEB82DFA6A7E951761A868 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				239903E90194F2145DA6236A /* PulsingMicButton.swift */,
+				D12A404740DB8473746F61B8 /* VoiceCaptureRootView.swift */,
+				A5DE85AA9DB59DBEEA88ACF6 /* VoiceCaptureState.swift */,
+				39484D526FB37B3E18B1FEEB /* VoiceCaptureViewModel.swift */,
+				7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		DB15E17E96A0955664F7AAB5 /* FinanceAgentWidget */ = {
+			isa = PBXGroup;
+			children = (
+				A82397083CD83BE3BA7FA840 /* AddExpenseControl.swift */,
+				7E60A1BF9C7ADD40BDE75DD3 /* FinanceAgentWidget.entitlements */,
+				90FE1003FF377C245D2916D8 /* FinanceAgentWidgetBundle.swift */,
+				CFAD0E67841C253BB2E35E8C /* Info.plist */,
+				DC9301071F9039482746DA43 /* README.md */,
+			);
+			path = FinanceAgentWidget;
+			sourceTree = "<group>";
+		};
+		F77D21E4D4A3F452D904B958 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				D3BEB82DFA6A7E951761A868 /* Voice */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		057EA0C93BD045B6C1887D8B /* FinanceAgentTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 148607347A92E17E73644C18 /* Build configuration list for PBXNativeTarget "FinanceAgentTests" */;
+			buildPhases = (
+				BAAE7FCFC12C1FD67778B34E /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A15AEAD61E3777EA709B1E98 /* PBXTargetDependency */,
+			);
+			name = FinanceAgentTests;
+			packageProductDependencies = (
+			);
+			productName = FinanceAgentTests;
+			productReference = 3B58C670C01C094AF26EFC5F /* FinanceAgentTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		EB4B37F13D7C69A92C455F10 /* FinanceAgentWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ECF9ECC22CBC210F19DEBEDB /* Build configuration list for PBXNativeTarget "FinanceAgentWidget" */;
+			buildPhases = (
+				52E7494A2904D0EE6701E8DB /* Sources */,
+				CE78807D39542762F6D42B45 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FinanceAgentWidget;
+			packageProductDependencies = (
+			);
+			productName = FinanceAgentWidget;
+			productReference = 544E0F2D96ED0C1675A9431F /* FinanceAgentWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		F3B886377B19958922C16A02 /* FinanceAgent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29227523E1C862B0E07C2ACB /* Build configuration list for PBXNativeTarget "FinanceAgent" */;
+			buildPhases = (
+				8B74F8762EBC8793D52BB554 /* Sources */,
+				6721B7AEDE7D1E34AE5149DA /* Resources */,
+				0CB9B1ACA8488B3E9FB476A4 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9B04572DA760940009D97FA2 /* PBXTargetDependency */,
+			);
+			name = FinanceAgent;
+			packageProductDependencies = (
+			);
+			productName = FinanceAgent;
+			productReference = 94EC981660C89A217D91371A /* FinanceAgent.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0D158A3D97BFBD8D5032B939 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 1A5F2DC4BBD8757A1EABDF8F /* Build configuration list for PBXProject "FinanceAgent" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8F2D404A48B5B5E5BCC956BF;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 364ABABF3CC84AE87C0A69BE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F3B886377B19958922C16A02 /* FinanceAgent */,
+				EB4B37F13D7C69A92C455F10 /* FinanceAgentWidget */,
+				057EA0C93BD045B6C1887D8B /* FinanceAgentTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6721B7AEDE7D1E34AE5149DA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D6447FE2D21919D305ADCC7 /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE78807D39542762F6D42B45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE012383094E9593B0B6BF3F /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		52E7494A2904D0EE6701E8DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A564C78A7328FACEA29F29B /* AddExpenseControl.swift in Sources */,
+				5F0095BC076D297A88855304 /* FinanceAgentWidgetBundle.swift in Sources */,
+				8D041DF5E614EBF02E3C46CB /* StartExpenseCaptureIntent.swift in Sources */,
+				B102FBED027B1FF7AD448DD6 /* VoiceCaptureRoute.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B74F8762EBC8793D52BB554 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				568FBAF19333F7166DC68C12 /* FinanceAgentApp.swift in Sources */,
+				CE4CAAD924F87686EBFA6991 /* PulsingMicButton.swift in Sources */,
+				75247382C189099A2DC6A0A6 /* StartExpenseCaptureIntent.swift in Sources */,
+				0E7FC2E8386A3F39BD0423D4 /* VoiceCaptureRootView.swift in Sources */,
+				10FCA92B9724073886424D89 /* VoiceCaptureRoute.swift in Sources */,
+				C8665B25832A81E09D971C09 /* VoiceCaptureState.swift in Sources */,
+				231C8D25D81E1F2207E21975 /* VoiceCaptureViewModel.swift in Sources */,
+				3401E38E081A886BF63C998B /* VoiceWaveformView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAAE7FCFC12C1FD67778B34E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F60A781D26193E3293F1772 /* VoiceCaptureReducerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9B04572DA760940009D97FA2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB4B37F13D7C69A92C455F10 /* FinanceAgentWidget */;
+			targetProxy = 0FE0AD81FA8B6BED44C1F35E /* PBXContainerItemProxy */;
+		};
+		A15AEAD61E3777EA709B1E98 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3B886377B19958922C16A02 /* FinanceAgent */;
+			targetProxy = D55CB14516A5B602258DCF33 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		28E0061E9FBA42BBF706DDCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FinanceAgentWidget/FinanceAgentWidget.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FinanceAgentWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.finoai.FinanceAgent.widget;
+				PRODUCT_NAME = FinanceAgentWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		459B7C27F39B5B0DF405B886 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FinanceAgent/FinanceAgent.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FinanceAgent/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.finoai.FinanceAgent;
+				PRODUCT_NAME = FinanceAgent;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7F8F5E98A665D784DFF728AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinanceAgent.app/FinanceAgent";
+			};
+			name = Release;
+		};
+		89EDA31D8B20FF0C83895533 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FinanceAgent/FinanceAgent.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FinanceAgent/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.finoai.FinanceAgent;
+				PRODUCT_NAME = FinanceAgent;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		97EDE7FF623D9385610A55DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinanceAgent.app/FinanceAgent";
+			};
+			name = Debug;
+		};
+		A786A70D9870DA074085A09D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FinanceAgentWidget/FinanceAgentWidget.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FinanceAgentWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.finoai.FinanceAgent.widget;
+				PRODUCT_NAME = FinanceAgentWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D6943FD5DEF6BE25DB175BC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		EA2BDC5081CD8CB120A92610 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		148607347A92E17E73644C18 /* Build configuration list for PBXNativeTarget "FinanceAgentTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				97EDE7FF623D9385610A55DB /* Debug */,
+				7F8F5E98A665D784DFF728AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1A5F2DC4BBD8757A1EABDF8F /* Build configuration list for PBXProject "FinanceAgent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6943FD5DEF6BE25DB175BC6 /* Debug */,
+				EA2BDC5081CD8CB120A92610 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		29227523E1C862B0E07C2ACB /* Build configuration list for PBXNativeTarget "FinanceAgent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89EDA31D8B20FF0C83895533 /* Debug */,
+				459B7C27F39B5B0DF405B886 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		ECF9ECC22CBC210F19DEBEDB /* Build configuration list for PBXNativeTarget "FinanceAgentWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28E0061E9FBA42BBF706DDCE /* Debug */,
+				A786A70D9870DA074085A09D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0D158A3D97BFBD8D5032B939 /* Project object */;
+}
