@@ -59,26 +59,11 @@ export function createApp() {
   });
 
   app.get("/debug/runtime", async (c) => {
-    const serviceRolePayload = decodeJwtPayload(process.env.SUPABASE_SERVICE_ROLE_KEY);
+    return c.json(getRuntimeDiagnostics());
+  });
 
-    return c.json({
-      success: true,
-      env: {
-        nodeEnv: process.env.NODE_ENV ?? null,
-        authMode: process.env.AUTH_MODE ?? null,
-        hasDevUserId: Boolean(process.env.DEV_USER_ID),
-        devUserId: maskValue(process.env.DEV_USER_ID),
-        hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
-        openAIModel: process.env.OPENAI_MODEL ?? null,
-        hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
-        supabaseUrlHost: process.env.SUPABASE_URL ? new URL(process.env.SUPABASE_URL).host : null,
-        hasSupabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
-        supabaseServiceRoleRole: serviceRolePayload?.role ?? null,
-        supabaseServiceRoleRef: serviceRolePayload?.ref ?? null,
-        supabaseServiceRoleIssuer: serviceRolePayload?.iss ?? null,
-        hasGladiaKey: Boolean(process.env.GLADIA_API_KEY)
-      }
-    });
+  app.get("/api/debug/runtime", async (c) => {
+    return c.json(getRuntimeDiagnostics());
   });
 
   app.post("/api/expenses", async (c) => {
@@ -160,4 +145,27 @@ function maskValue(value: string | undefined): string | null {
   }
 
   return `${value.slice(0, 4)}...${value.slice(-4)}`;
+}
+
+function getRuntimeDiagnostics() {
+  const serviceRolePayload = decodeJwtPayload(process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+  return {
+    success: true,
+    env: {
+      nodeEnv: process.env.NODE_ENV ?? null,
+      authMode: process.env.AUTH_MODE ?? null,
+      hasDevUserId: Boolean(process.env.DEV_USER_ID),
+      devUserId: maskValue(process.env.DEV_USER_ID),
+      hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
+      openAIModel: process.env.OPENAI_MODEL ?? null,
+      hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
+      supabaseUrlHost: process.env.SUPABASE_URL ? new URL(process.env.SUPABASE_URL).host : null,
+      hasSupabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+      supabaseServiceRoleRole: serviceRolePayload?.role ?? null,
+      supabaseServiceRoleRef: serviceRolePayload?.ref ?? null,
+      supabaseServiceRoleIssuer: serviceRolePayload?.iss ?? null,
+      hasGladiaKey: Boolean(process.env.GLADIA_API_KEY)
+    }
+  };
 }
