@@ -32,8 +32,8 @@ final class VoiceCaptureReducerTests: XCTestCase {
 
   func testSubmissionFailedFailsWithRetryGuidance() {
     XCTAssertEqual(
-      VoiceCaptureReducer.reduce(.submitting, event: .submissionFailed),
-      .failure(.submissionFailed)
+      VoiceCaptureReducer.reduce(.submitting, event: .submissionFailed(detail: "boom")),
+      .failure(.submissionFailed(detail: "boom"))
     )
   }
 }

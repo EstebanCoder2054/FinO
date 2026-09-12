@@ -16,7 +16,7 @@ enum VoiceCaptureFailure: Equatable {
   case recognizerUnavailable
   case recordingFailed
   case noSpeechDetected
-  case submissionFailed
+  case submissionFailed(detail: String)
 }
 
 enum VoiceCaptureEvent {
@@ -31,7 +31,7 @@ enum VoiceCaptureEvent {
   case noSpeechDetected
   case submissionStarted
   case submissionSucceeded
-  case submissionFailed
+  case submissionFailed(detail: String)
 }
 
 enum VoiceCaptureReducer {
@@ -57,8 +57,8 @@ enum VoiceCaptureReducer {
       return .submitting
     case .submissionSucceeded:
       return .success
-    case .submissionFailed:
-      return .failure(.submissionFailed)
+    case .submissionFailed(let detail):
+      return .failure(.submissionFailed(detail: detail))
     }
   }
 }
@@ -79,5 +79,13 @@ extension VoiceCaptureFailure {
     case .submissionFailed:
       return "No se pudo enviar el gasto. Inténtalo otra vez."
     }
+  }
+
+  /// The underlying API/network error behind a submission failure — kept out
+  /// of `message` (which stays friendly for the main screen) and shown only
+  /// when the user taps the status pill to see what actually went wrong.
+  var detail: String? {
+    if case .submissionFailed(let detail) = self { return detail }
+    return nil
   }
 }

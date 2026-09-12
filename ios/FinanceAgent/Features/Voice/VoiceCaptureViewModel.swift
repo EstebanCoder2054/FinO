@@ -99,8 +99,19 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
       } catch {
         voiceCaptureLog.error("expense submission failed: \(String(describing: error), privacy: .public)")
         guard transcript == text else { return }
-        state = VoiceCaptureReducer.reduce(state, event: .submissionFailed)
+        state = VoiceCaptureReducer.reduce(state, event: .submissionFailed(detail: Self.errorDetail(for: error)))
       }
+    }
+  }
+
+  private static func errorDetail(for error: Error) -> String {
+    switch error {
+    case ExpenseAPIError.serverMessage(let message):
+      return message
+    case ExpenseAPIError.invalidResponse:
+      return "El servidor devolvió una respuesta inválida."
+    default:
+      return (error as NSError).localizedDescription
     }
   }
 

@@ -6,6 +6,7 @@ struct VoiceCaptureRootView: View {
   @StateObject private var viewModel = VoiceCaptureViewModel()
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
+  @State private var showErrorDetail = false
 
   var body: some View {
     NavigationStack {
@@ -90,13 +91,38 @@ struct VoiceCaptureRootView: View {
   }
 
   private var statusPill: some View {
-    Text(statusText)
+    let pill = Text(statusText)
       .font(.caption.weight(.semibold))
       .padding(.horizontal, 12)
       .padding(.vertical, 6)
       .background(statusColor.opacity(0.18), in: Capsule())
       .foregroundStyle(statusColor)
       .animation(.easeInOut(duration: 0.25), value: statusText)
+
+    return Group {
+      if let failureDetail {
+        Button {
+          showErrorDetail = true
+        } label: {
+          pill
+        }
+        .alert("Detalle del error", isPresented: $showErrorDetail) {
+          Button("OK", role: .cancel) {}
+        } message: {
+          Text(failureDetail)
+        }
+      } else {
+        pill
+      }
+    }
+  }
+
+  /// The technical error behind a failed submission — the "Error" pill is
+  /// only tappable when this is non-nil, since other failures (permissions,
+  /// no speech) already say everything relevant in the main copy.
+  private var failureDetail: String? {
+    if case .failure(let failure) = viewModel.state { return failure.detail }
+    return nil
   }
 
   private var content: some View {
@@ -274,7 +300,8 @@ struct VoiceCaptureRootView: View {
   }
 
   private var isSubmissionFailure: Bool {
-    viewModel.state == .failure(.submissionFailed)
+    if case .failure(.submissionFailed) = viewModel.state { return true }
+    return false
   }
 
   private var glowColor: Color {
