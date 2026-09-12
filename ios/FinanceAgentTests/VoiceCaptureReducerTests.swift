@@ -22,4 +22,18 @@ final class VoiceCaptureReducerTests: XCTestCase {
       .transcribing
     )
   }
+
+  func testSubmissionStartedTransitionsToSubmitting() {
+    XCTAssertEqual(
+      VoiceCaptureReducer.reduce(.transcribing, event: .submissionStarted),
+      .submitting
+    )
+  }
+
+  func testSubmissionFailedFailsWithRetryGuidance() {
+    XCTAssertEqual(
+      VoiceCaptureReducer.reduce(.submitting, event: .submissionFailed),
+      .failure(.submissionFailed)
+    )
+  }
 }

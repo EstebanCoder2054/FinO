@@ -11,6 +11,11 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
   @Published private(set) var transcript = ""
   @Published private(set) var audioLevel: CGFloat = 0
 
+  /// Invoked with the finalized transcript once a submission succeeds, so the
+  /// view layer can persist it (e.g. to SwiftData) without this view model
+  /// knowing about storage.
+  var onExpenseCaptured: ((String) -> Void)?
+
   private var audioEngine = AVAudioEngine()
   private let speechRecognizer = VoiceCaptureViewModel.makeSpeechRecognizer()
   private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -55,10 +60,32 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
   func finishCapture() {
     guard state == .listening else { return }
     stopListening()
-    state = VoiceCaptureReducer.reduce(
-      state,
-      event: transcript.isEmpty ? .noSpeechDetected : .transcriptFinalized
-    )
+    if transcript.isEmpty {
+      state = VoiceCaptureReducer.reduce(state, event: .noSpeechDetected)
+    } else {
+      state = VoiceCaptureReducer.reduce(state, event: .transcriptFinalized)
+      submit()
+    }
+  }
+
+  func retrySubmit() {
+    guard case .failure(.submissionFailed) = state else { return }
+    submit()
+  }
+
+  private func submit() {
+    state = VoiceCaptureReducer.reduce(state, event: .submissionStarted)
+    let text = transcript
+    Task {
+      // Placeholder: no backend wired up yet (POST /api/expenses pending).
+      // Swap this simulated delay for the real network call once that's ready;
+      // the submitting/failure/retry states above stay the same.
+      try? await Task.sleep(nanoseconds: 700_000_000)
+      guard transcript == text else { return }
+      onExpenseCaptured?(text)
+      transcript = ""
+      state = VoiceCaptureReducer.reduce(state, event: .submissionSucceeded)
+    }
   }
 
   private func startListening() {
@@ -74,6 +101,9 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
 
     let request = SFSpeechAudioBufferRecognitionRequest()
     request.shouldReportPartialResults = true
+    // .dictation avoids the short-phrase/search bias that clips trailing
+    // syllables (e.g. "gasto" -> "gas") on longer freeform sentences.
+    request.taskHint = .dictation
     recognitionRequest = request
 
     do {
@@ -98,7 +128,7 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
 
       Self.installTap(
         on: inputNode,
-        bufferSize: 1_024,
+        bufferSize: 4_096,
         format: format,
         request: request
       ) { [weak self] level in
@@ -123,7 +153,12 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
           case .final(let text):
             self.transcript = text
             self.stopListening()
-            self.state = VoiceCaptureReducer.reduce(self.state, event: .transcriptFinalized)
+            if text.isEmpty {
+              self.state = VoiceCaptureReducer.reduce(self.state, event: .noSpeechDetected)
+            } else {
+              self.state = VoiceCaptureReducer.reduce(self.state, event: .transcriptFinalized)
+              self.submit()
+            }
           case .failed:
             if self.transcript.isEmpty {
               self.stopListening()
@@ -147,7 +182,8 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
 // the runtime assert the calling thread was main and trap when it wasn't.
 extension VoiceCaptureViewModel {
   private static func makeSpeechRecognizer() -> SFSpeechRecognizer? {
-    SFSpeechRecognizer(locale: Locale(identifier: "es_CO"))
+    SFSpeechRecognizer(locale: Locale(identifier: "es-419"))
+      ?? SFSpeechRecognizer(locale: Locale(identifier: "es_CO"))
       ?? SFSpeechRecognizer(locale: Locale(identifier: "es_MX"))
       ?? SFSpeechRecognizer()
   }

@@ -5,6 +5,7 @@ enum VoiceCaptureState: Equatable {
   case requestingPermission
   case listening
   case transcribing
+  case submitting
   case failure(VoiceCaptureFailure)
 }
 
@@ -14,6 +15,7 @@ enum VoiceCaptureFailure: Equatable {
   case recognizerUnavailable
   case recordingFailed
   case noSpeechDetected
+  case submissionFailed
 }
 
 enum VoiceCaptureEvent {
@@ -26,6 +28,9 @@ enum VoiceCaptureEvent {
   case transcriptFinalized
   case recordingFailed
   case noSpeechDetected
+  case submissionStarted
+  case submissionSucceeded
+  case submissionFailed
 }
 
 enum VoiceCaptureReducer {
@@ -47,6 +52,12 @@ enum VoiceCaptureReducer {
       return .failure(.recordingFailed)
     case .noSpeechDetected:
       return .failure(.noSpeechDetected)
+    case .submissionStarted:
+      return .submitting
+    case .submissionSucceeded:
+      return .idle
+    case .submissionFailed:
+      return .failure(.submissionFailed)
     }
   }
 }
@@ -64,6 +75,8 @@ extension VoiceCaptureFailure {
       return "No se pudo iniciar la grabación. Inténtalo otra vez."
     case .noSpeechDetected:
       return "No detecté un gasto. Inténtalo diciendo el monto y la compra."
+    case .submissionFailed:
+      return "No se pudo enviar el gasto. Inténtalo otra vez."
     }
   }
 }

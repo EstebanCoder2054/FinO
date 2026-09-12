@@ -1,27 +1,79 @@
+import SwiftData
 import SwiftUI
 
 struct VoiceCaptureRootView: View {
   @Binding var voiceCaptureRequested: Bool
   @StateObject private var viewModel = VoiceCaptureViewModel()
+  @Environment(\.modelContext) private var modelContext
 
   var body: some View {
-    ZStack {
-      backgroundGradient
+    NavigationStack {
+      ZStack {
+        backgroundGradient
 
-      VStack(spacing: 0) {
-        header
-        Spacer(minLength: 24)
-        content
-        Spacer(minLength: 24)
-        footer
+        VStack(spacing: 0) {
+          header
+          Spacer(minLength: 24)
+          content
+          Spacer(minLength: 24)
+          footer
+        }
+        .padding(.horizontal, 28)
+        .padding(.vertical, 24)
       }
-      .padding(.horizontal, 28)
-      .padding(.vertical, 24)
+      .navigationBarHidden(true)
     }
-    .onAppear(perform: startRequestedCaptureIfNeeded)
+    .onAppear {
+      viewModel.onExpenseCaptured = { transcript in
+        modelContext.insert(
+          Expense(
+            amount: Self.extractAmount(from: transcript),
+            category: Self.extractCategory(from: transcript),
+            kind: Self.extractKind(from: transcript),
+            expenseDescription: transcript,
+            source: "voice"
+          )
+        )
+      }
+      startRequestedCaptureIfNeeded()
+    }
     .onChange(of: voiceCaptureRequested) { _, _ in
       startRequestedCaptureIfNeeded()
     }
+  }
+
+  private static func extractAmount(from text: String) -> Double? {
+    guard let range = text.range(of: #"\d[\d.,]*"#, options: .regularExpression) else { return nil }
+    let normalized = text[range]
+      .replacingOccurrences(of: ".", with: "")
+      .replacingOccurrences(of: ",", with: ".")
+    return Double(normalized)
+  }
+
+  private static let incomeKeywords = [
+    "ingreso", "ingresé", "me pagaron", "me pagó", "recibí", "cobré", "gané",
+    "salario", "sueldo", "me depositaron", "depositaron", "abonaron", "me consignaron"
+  ]
+
+  private static func extractKind(from text: String) -> ExpenseKind {
+    let lowered = text.lowercased()
+    return incomeKeywords.contains { lowered.contains($0) } ? .income : .expense
+  }
+
+  private static let categoryKeywords: [String: [String]] = [
+    "Comida": ["restaurante", "comida", "almuerzo", "desayuno", "cena", "mercado", "supermercado", "domicilio"],
+    "Transporte": ["uber", "taxi", "bus", "transporte", "gasolina", "parqueadero", "peaje", "metro", "didi"],
+    "Hogar": ["arriendo", "hogar", "servicios", "luz", "agua", "internet", "gas", "administración"],
+    "Entretenimiento": ["cine", "netflix", "entretenimiento", "salida", "bar", "fiesta", "streaming", "juego"],
+    "Salud": ["farmacia", "médico", "salud", "droguería", "eps", "medicina", "consulta"]
+  ]
+
+  private static func extractCategory(from text: String) -> String {
+    let lowered = text.lowercased()
+    for (category, keywords) in categoryKeywords where keywords.contains(where: lowered.contains) {
+      return category
+    }
+    return "Otros"
   }
 
   private var backgroundGradient: some View {
@@ -43,11 +95,20 @@ struct VoiceCaptureRootView: View {
   }
 
   private var header: some View {
-    HStack {
+    HStack(spacing: 12) {
       Label("Fino", systemImage: "sparkles")
         .font(.subheadline.weight(.semibold))
         .foregroundStyle(.mint)
       Spacer()
+      NavigationLink {
+        HistoryView(voiceCaptureRequested: $voiceCaptureRequested)
+      } label: {
+        Image(systemName: "list.bullet.rectangle.portrait")
+          .font(.subheadline.weight(.semibold))
+          .foregroundStyle(.white.opacity(0.85))
+          .padding(8)
+          .background(.white.opacity(0.1), in: Circle())
+      }
       statusPill
     }
   }
@@ -115,6 +176,15 @@ struct VoiceCaptureRootView: View {
         .contentTransition(.opacity)
         .animation(.easeInOut(duration: 0.2), value: buttonHint)
 
+      if isSubmissionFailure {
+        Button("Volver a intentar") {
+          viewModel.retrySubmit()
+        }
+        .font(.subheadline.weight(.bold))
+        .foregroundStyle(.mint)
+        .transition(.opacity)
+      }
+
       if showsCancel {
         Button("Cancelar", role: .cancel) {
           viewModel.cancel()
@@ -131,7 +201,7 @@ struct VoiceCaptureRootView: View {
     switch viewModel.state {
     case .idle, .transcribing:
       return .idle
-    case .requestingPermission:
+    case .requestingPermission, .submitting:
       return .busy
     case .listening:
       return .listening
@@ -144,6 +214,7 @@ struct VoiceCaptureRootView: View {
     switch viewModel.state {
     case .listening: return "Te escucho"
     case .transcribing: return "Perfecto"
+    case .submitting: return "Enviando…"
     case .failure: return "Intentémoslo de nuevo"
     case .requestingPermission: return "Un momento"
     case .idle: return "Registra un gasto"
@@ -154,6 +225,7 @@ struct VoiceCaptureRootView: View {
     switch viewModel.state {
     case .listening: return "Di qué compraste y cuánto pagaste."
     case .transcribing: return "Ya casi enviamos tu gasto."
+    case .submitting: return "Estamos guardando tu gasto, espera un momento."
     case .requestingPermission: return "Activando el micrófono y el reconocimiento de voz."
     case .idle: return "Por ejemplo: “Gasté cuarenta y cinco mil pesos en Uber”."
     case let .failure(failure): return failure.message
@@ -165,6 +237,7 @@ struct VoiceCaptureRootView: View {
     case .listening: return "Toca para enviar"
     case .requestingPermission: return "Solicitando permisos…"
     case .transcribing: return "Toca para grabar otro gasto"
+    case .submitting: return "Enviando…"
     case .failure: return "Toca para intentar de nuevo"
     case .idle: return "Toca para hablar"
     }
@@ -176,6 +249,7 @@ struct VoiceCaptureRootView: View {
     case .requestingPermission: return "Permisos"
     case .listening: return "Escuchando"
     case .transcribing: return "Procesando"
+    case .submitting: return "Enviando"
     case .failure: return "Error"
     }
   }
@@ -184,9 +258,13 @@ struct VoiceCaptureRootView: View {
     switch viewModel.state {
     case .failure: return .red
     case .listening: return .mint
-    case .transcribing: return .yellow
+    case .transcribing, .submitting: return .yellow
     case .requestingPermission, .idle: return .white.opacity(0.6)
     }
+  }
+
+  private var isSubmissionFailure: Bool {
+    viewModel.state == .failure(.submissionFailed)
   }
 
   private var glowColor: Color {
