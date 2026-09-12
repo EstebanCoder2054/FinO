@@ -6,6 +6,7 @@ import SwiftUI
 /// meant to come from speaking to Fino, not a manual form.
 struct ExpenseFormView: View {
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
 
   private let expenseToEdit: Expense
   private let apiClient = ExpenseAPIClient.shared
@@ -18,6 +19,7 @@ struct ExpenseFormView: View {
   @State private var date: Date
   @State private var isSaving = false
   @State private var syncErrorMessage: String?
+  @State private var showDeleteConfirmation = false
 
   /// Matches the backend's `supportedCurrencies` enum exactly — sending
   /// anything else fails PATCH validation, so the picker can't offer it.
@@ -66,6 +68,18 @@ struct ExpenseFormView: View {
 
           DatePicker("Fecha", selection: $date, displayedComponents: [.date, .hourAndMinute])
         }
+
+        Section {
+          Button(role: .destructive) {
+            showDeleteConfirmation = true
+          } label: {
+            HStack {
+              Spacer()
+              Text("Eliminar")
+              Spacer()
+            }
+          }
+        }
       }
       .navigationTitle("Editar \(kind == .income ? "ingreso" : "gasto")")
       .navigationBarTitleDisplayMode(.inline)
@@ -94,6 +108,14 @@ struct ExpenseFormView: View {
       Button("Entendido", role: .cancel) { dismiss() }
     } message: { message in
       Text("El cambio quedó guardado en el teléfono, pero no se pudo enviar al servidor: \(message)")
+    }
+    .confirmationDialog(
+      "¿Eliminar este movimiento?",
+      isPresented: $showDeleteConfirmation,
+      titleVisibility: .visible
+    ) {
+      Button("Eliminar", role: .destructive, action: delete)
+      Button("Cancelar", role: .cancel) {}
     }
   }
 
@@ -138,6 +160,17 @@ struct ExpenseFormView: View {
       } else {
         dismiss()
       }
+    }
+  }
+
+  /// Same optimistic pattern as HistoryView's swipe-to-delete: gone locally
+  /// right away, DELETE fired in the background, dismiss immediately.
+  private func delete() {
+    let id = expenseToEdit.id
+    modelContext.delete(expenseToEdit)
+    dismiss()
+    Task {
+      try? await apiClient.deleteExpense(id: id)
     }
   }
 }
