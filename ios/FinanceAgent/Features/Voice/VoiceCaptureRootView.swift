@@ -162,7 +162,7 @@ struct VoiceCaptureRootView: View {
 
   private var buttonHint: String {
     switch viewModel.state {
-    case .listening: return "Escuchando…"
+    case .listening: return "Toca para enviar"
     case .requestingPermission: return "Solicitando permisos…"
     case .transcribing: return "Toca para grabar otro gasto"
     case .failure: return "Toca para intentar de nuevo"
@@ -203,7 +203,11 @@ struct VoiceCaptureRootView: View {
   }
 
   private func startCapture() {
-    viewModel.beginCapture()
+    if viewModel.state == .listening {
+      viewModel.finishCapture()
+    } else {
+      viewModel.beginCapture()
+    }
   }
 
   private func startRequestedCaptureIfNeeded() {

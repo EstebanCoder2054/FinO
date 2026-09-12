@@ -11,7 +11,7 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
   @Published private(set) var transcript = ""
   @Published private(set) var audioLevel: CGFloat = 0
 
-  private let audioEngine = AVAudioEngine()
+  private var audioEngine = AVAudioEngine()
   private let speechRecognizer = VoiceCaptureViewModel.makeSpeechRecognizer()
   private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
   private var recognitionTask: SFSpeechRecognitionTask?
@@ -52,6 +52,15 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
     state = .idle
   }
 
+  func finishCapture() {
+    guard state == .listening else { return }
+    stopListening()
+    state = VoiceCaptureReducer.reduce(
+      state,
+      event: transcript.isEmpty ? .noSpeechDetected : .transcriptFinalized
+    )
+  }
+
   private func startListening() {
     let supportedCount = SFSpeechRecognizer.supportedLocales().count
     let recognizer = speechRecognizer
@@ -72,9 +81,20 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
       try session.setCategory(.record, mode: .measurement, options: .duckOthers)
       try session.setActive(true, options: .notifyOthersOnDeactivation)
 
+      // Fresh engine per capture: reusing one instance across sessions can leave
+      // the input node reporting a stale (0 Hz / 0 channel) format after a route
+      // change (e.g. Bluetooth), which crashes `installTap` with an uncatchable
+      // Obj-C exception rather than a Swift error.
+      audioEngine = AVAudioEngine()
       let inputNode = audioEngine.inputNode
-      inputNode.removeTap(onBus: 0)
       let format = inputNode.outputFormat(forBus: 0)
+      guard format.sampleRate > 0, format.channelCount > 0 else {
+        voiceCaptureLog.error(
+          "invalid input format sampleRate=\(format.sampleRate, privacy: .public) channels=\(format.channelCount, privacy: .public)"
+        )
+        state = VoiceCaptureReducer.reduce(state, event: .recordingFailed)
+        return
+      }
 
       Self.installTap(
         on: inputNode,
