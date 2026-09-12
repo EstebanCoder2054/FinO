@@ -1,5 +1,6 @@
-import type { Response } from "express";
 import { ZodError } from "zod";
+
+export type ApiStatusCode = 400 | 401 | 403 | 404 | 409 | 429 | 500 | 502 | 503;
 
 export type ApiErrorCode =
   | "bad_request"
@@ -14,7 +15,7 @@ export type ApiErrorCode =
 
 export class ApiError extends Error {
   constructor(
-    public readonly status: number,
+    public readonly status: ApiStatusCode,
     public readonly code: ApiErrorCode,
     message: string
   ) {
@@ -22,24 +23,38 @@ export class ApiError extends Error {
   }
 }
 
-export function sendError(res: Response, error: unknown): void {
+export function toErrorResponse(error: unknown): {
+  status: ApiStatusCode;
+  body: {
+    success: false;
+    code: ApiErrorCode;
+    message: string;
+  };
+} {
   if (error instanceof ApiError) {
-    res.status(error.status).json({ success: false, code: error.code, message: error.message });
-    return;
+    return {
+      status: error.status,
+      body: { success: false, code: error.code, message: error.message }
+    };
   }
 
   if (error instanceof ZodError) {
-    res.status(400).json({
-      success: false,
-      code: "bad_request",
-      message: error.issues[0]?.message ?? "Invalid request."
-    });
-    return;
+    return {
+      status: 400,
+      body: {
+        success: false,
+        code: "bad_request",
+        message: error.issues[0]?.message ?? "Invalid request."
+      }
+    };
   }
 
-  res.status(500).json({
-    success: false,
-    code: "internal_error",
-    message: "Unexpected server error."
-  });
+  return {
+    status: 500,
+    body: {
+      success: false,
+      code: "internal_error",
+      message: "Unexpected server error."
+    }
+  };
 }
