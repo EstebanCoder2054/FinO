@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ApiError } from "../api/errors.js";
 import { getOptionalEnv } from "../config/env.js";
 import { categorizeExpense } from "../tools/categorizeExpense.js";
+import { extractGroupedDigitAmount } from "../services/expenseParser.js";
 import { expenseCategories, supportedCurrencies, type CreateExpenseInput } from "../types/expense.js";
 import { getOpenAIClient } from "./openaiClient.js";
 
@@ -110,10 +111,16 @@ export async function runExpenseAgent(input: string): Promise<ExpenseAgentResult
       ? categorizeExpense({ description: parsed.description, merchant: parsed.merchant, amount: parsed.amount })
       : { category: parsed.category, confidence: parsed.confidence };
 
+  // Cross-check against an unambiguous grouped-digit amount in the raw text
+  // ("50.000", "50,000"): the model has been seen reading the separator as
+  // a decimal point and returning e.g. "50" for "50,000 pesos".
+  const groupedDigitAmount = extractGroupedDigitAmount(input);
+  const amount = groupedDigitAmount ?? parsed.amount;
+
   return {
     status: "ok",
     expense: {
-      amount: parsed.amount,
+      amount,
       currency: parsed.currency,
       category: categoryResult.category,
       description: parsed.description,

@@ -80,13 +80,42 @@ function extractAmount(input: string): string | null {
     return null;
   }
 
-  const normalized = numericMatch[0].replace(/\./g, "").replace(",", ".");
-  const value = Number(normalized);
+  const value = Number(normalizeGroupedNumber(numericMatch[0]));
   if (!Number.isFinite(value) || value <= 0) {
     return null;
   }
 
   return value.toFixed(Number.isInteger(value) ? 0 : 2);
+}
+
+/**
+ * Normalizes a number that may use "." or "," as either a thousands
+ * separator or a decimal point (locale-ambiguous). Amounts here are pesos —
+ * no cents in practice — so any separator immediately followed by exactly
+ * three digits is a thousands group and gets stripped, regardless of which
+ * character it is; a separator left over after that (followed by 1-2
+ * digits) is a genuine decimal point. Blindly assuming "," is always
+ * decimal previously turned "50,000" into 50 instead of 50000.
+ */
+function normalizeGroupedNumber(raw: string): string {
+  return raw.replace(/[.,](\d{3})(?!\d)/g, "$1").replace(",", ".");
+}
+
+/**
+ * Cross-check for an unambiguous grouped-digit amount ("50.000", "50,000",
+ * "1.234.567") anywhere in free text. Exists because both the LLM agent and
+ * plain parsing here have been seen misreading the separator as a decimal
+ * point — this regex only matches when there's no such ambiguity (a full
+ * three-digit group), so it's safe to use as an override.
+ */
+export function extractGroupedDigitAmount(input: string): string | null {
+  const match = input.match(/\b\d{1,3}(?:[.,]\d{3})+\b/);
+  if (!match) {
+    return null;
+  }
+
+  const value = Number(normalizeGroupedNumber(match[0]));
+  return Number.isFinite(value) && value > 0 ? String(value) : null;
 }
 
 function parseNumberToken(token: string): number | null {
