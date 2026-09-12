@@ -1,12 +1,5 @@
 # FinanceAgent App
 
-Native SwiftUI app target placeholder.
+Native SwiftUI app target. Persona 2 owns the `Features/Voice` flow: permissions, microphone capture, Spanish speech transcription, and handoff from the Control Center intent.
 
-Expected responsibilities:
-
-- authentication UI
-- secure token/session handling
-- home dashboard
-- expense history
-- expense capture and confirmation
-- API client using `Authorization: Bearer <token>`
+The current implementation stops after transcription because Persona 1 has not yet implemented authenticated expense creation. Do not add dashboard, history, or auth UI here without coordinating with Persona 3.

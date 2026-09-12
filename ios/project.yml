@@ -1,0 +1,73 @@
+name: FinanceAgent
+options:
+  minimumXcodeGenVersion: 2.46.0
+  deploymentTarget:
+    iOS: 18.0
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    IPHONEOS_DEPLOYMENT_TARGET: 18.0
+    TARGETED_DEVICE_FAMILY: 1
+targets:
+  FinanceAgent:
+    type: application
+    platform: iOS
+    sources:
+      - path: FinanceAgent
+      - path: Shared
+    dependencies:
+      - target: FinanceAgentWidget
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.finoai.FinanceAgent
+        PRODUCT_NAME: FinanceAgent
+        GENERATE_INFOPLIST_FILE: NO
+    info:
+      path: FinanceAgent/Info.plist
+      properties:
+        CFBundleDisplayName: Fino
+        NSMicrophoneUsageDescription: Fino usa el micrófono para registrar gastos por voz.
+        NSSpeechRecognitionUsageDescription: Fino convierte tu voz en texto para registrar gastos.
+        UILaunchScreen: {}
+    entitlements:
+      path: FinanceAgent/FinanceAgent.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.finoai.financeagent
+    scheme:
+      testTargets:
+        - FinanceAgentTests
+  FinanceAgentWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: FinanceAgentWidget
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.finoai.FinanceAgent.widget
+        PRODUCT_NAME: FinanceAgentWidget
+        GENERATE_INFOPLIST_FILE: NO
+        SKIP_INSTALL: YES
+    info:
+      path: FinanceAgentWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Registrar gasto
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: FinanceAgentWidget/FinanceAgentWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.finoai.financeagent
+  FinanceAgentTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: FinanceAgentTests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: FinanceAgent

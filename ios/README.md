@@ -1,16 +1,16 @@
 # iOS
 
-Native iOS workspace placeholder.
+Native iOS 18+ workspace generated from `project.yml` with XcodeGen. It contains the Persona 2 system-entry foundation: a WidgetKit Control, a shared `OpenIntent`, and the voice-capture route.
 
-Expected structure once the Xcode project is created:
+## Generate and run
 
-```text
-ios/
-  FinanceAgent.xcodeproj
-  FinanceAgent/
-  FinanceAgentWidget/
+```bash
+brew install xcodegen # once
+cd ios
+xcodegen generate
+xcodebuild -project FinanceAgent.xcodeproj -scheme FinanceAgent -destination 'generic/platform=iOS Simulator' build CODE_SIGNING_ALLOWED=NO
 ```
 
-The app must use Swift, SwiftUI, WidgetKit, App Intents, and Apple's Speech framework where appropriate.
+Open `FinanceAgent.xcodeproj` in Xcode to run the app on an iOS 18+ simulator or a signed device. The Control Center surface and microphone/speech permissions should be tested on a real iPhone before the demo.
 
-iOS may use Supabase Auth for sign-in/session management, but all application data access must go through the backend over HTTPS.
+The app uses Swift, SwiftUI, WidgetKit, App Intents, and Apple's Speech framework. iOS may use Supabase Auth for sign-in/session management, but all application data access must go through the backend over HTTPS.

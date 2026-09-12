@@ -33,9 +33,9 @@ This repo is bootstrapped for collaborative GitHub development. It includes:
 - API and database contracts
 - Supabase initial migration and demo seed
 - TypeScript backend foundation with health endpoint, validation, domain types, and tests
-- iOS folder placeholders for the native app and widget extension
+- native iOS 18+ project with a WidgetKit Control, shared App Intent, and voice-capture foundation
 
-The OpenAI agent and real iOS Xcode project are intentionally next steps, following the implementation order in `AGENTS.md`.
+The authenticated expense endpoint, OpenAI agent, and persistence remain the next backend steps, following the implementation order in `AGENTS.md`.
 
 ## Backend Setup
 
