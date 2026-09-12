@@ -7,21 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06D7342F2ED1CFF0B376DB51 /* ExpenseStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D6A4644918304EE122DB3A /* ExpenseStyle.swift */; };
 		0E7FC2E8386A3F39BD0423D4 /* VoiceCaptureRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12A404740DB8473746F61B8 /* VoiceCaptureRootView.swift */; };
 		10FCA92B9724073886424D89 /* VoiceCaptureRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */; };
 		231C8D25D81E1F2207E21975 /* VoiceCaptureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39484D526FB37B3E18B1FEEB /* VoiceCaptureViewModel.swift */; };
 		3401E38E081A886BF63C998B /* VoiceWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */; };
+		4A418526C9DE8D99EDB5615D /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E0B75C29E044706EBAB86 /* Color+Hex.swift */; };
 		568FBAF19333F7166DC68C12 /* FinanceAgentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3D6F5C3AC1F5F6DE5513AC /* FinanceAgentApp.swift */; };
 		5F0095BC076D297A88855304 /* FinanceAgentWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FE1003FF377C245D2916D8 /* FinanceAgentWidgetBundle.swift */; };
 		6C6D0A4A1B3C08EEF328A91E /* FinanceAgentWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 544E0F2D96ED0C1675A9431F /* FinanceAgentWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		75247382C189099A2DC6A0A6 /* StartExpenseCaptureIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9BC231A7DF58D1DE4A4F45 /* StartExpenseCaptureIntent.swift */; };
+		79373F44AE71B80378F4AB31 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C796D3A544CAD160917FC678 /* Assets.xcassets */; };
 		7A564C78A7328FACEA29F29B /* AddExpenseControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82397083CD83BE3BA7FA840 /* AddExpenseControl.swift */; };
 		7F60A781D26193E3293F1772 /* VoiceCaptureReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ADAB1BDE1A00FEA8C27371 /* VoiceCaptureReducerTests.swift */; };
 		8D041DF5E614EBF02E3C46CB /* StartExpenseCaptureIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9BC231A7DF58D1DE4A4F45 /* StartExpenseCaptureIntent.swift */; };
+		950802F9F51B5CEEC1EE6FDC /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3BA351C7A0FF6C62A4582F /* ExpenseFormView.swift */; };
 		9D6447FE2D21919D305ADCC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BE5871A09073FE646ED28EE1 /* README.md */; };
+		AC35A71E1E8F602EC50CFD28 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4181B62422B14C5AA93C27EF /* HistoryView.swift */; };
 		B102FBED027B1FF7AD448DD6 /* VoiceCaptureRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */; };
 		C8665B25832A81E09D971C09 /* VoiceCaptureState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DE85AA9DB59DBEEA88ACF6 /* VoiceCaptureState.swift */; };
 		CE4CAAD924F87686EBFA6991 /* PulsingMicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239903E90194F2145DA6236A /* PulsingMicButton.swift */; };
+		EDDAFC8B65D9C05C647AA3CB /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510B899BF6061FBBB4BEAEDD /* Expense.swift */; };
 		EE012383094E9593B0B6BF3F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DC9301071F9039482746DA43 /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -59,18 +65,24 @@
 /* Begin PBXFileReference section */
 		239903E90194F2145DA6236A /* PulsingMicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulsingMicButton.swift; sourceTree = "<group>"; };
 		287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureRoute.swift; sourceTree = "<group>"; };
+		2F9E0B75C29E044706EBAB86 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		39484D526FB37B3E18B1FEEB /* VoiceCaptureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureViewModel.swift; sourceTree = "<group>"; };
 		3B58C670C01C094AF26EFC5F /* FinanceAgentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FinanceAgentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4181B62422B14C5AA93C27EF /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		510B899BF6061FBBB4BEAEDD /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		544E0F2D96ED0C1675A9431F /* FinanceAgentWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinanceAgentWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6A9BFDF9EE6C9DDA3DF56B /* FinanceAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinanceAgent.entitlements; sourceTree = "<group>"; };
 		7D2E904F2C0961799FF020DE /* VoiceWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceWaveformView.swift; sourceTree = "<group>"; };
 		7E60A1BF9C7ADD40BDE75DD3 /* FinanceAgentWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FinanceAgentWidget.entitlements; sourceTree = "<group>"; };
+		8E3BA351C7A0FF6C62A4582F /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
 		90FE1003FF377C245D2916D8 /* FinanceAgentWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceAgentWidgetBundle.swift; sourceTree = "<group>"; };
 		94EC981660C89A217D91371A /* FinanceAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinanceAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A20335D4DD2AAE2B615D4E3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A5D6A4644918304EE122DB3A /* ExpenseStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseStyle.swift; sourceTree = "<group>"; };
 		A5DE85AA9DB59DBEEA88ACF6 /* VoiceCaptureState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureState.swift; sourceTree = "<group>"; };
 		A82397083CD83BE3BA7FA840 /* AddExpenseControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseControl.swift; sourceTree = "<group>"; };
 		BE5871A09073FE646ED28EE1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C796D3A544CAD160917FC678 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD3D6F5C3AC1F5F6DE5513AC /* FinanceAgentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceAgentApp.swift; sourceTree = "<group>"; };
 		CFAD0E67841C253BB2E35E8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D12A404740DB8473746F61B8 /* VoiceCaptureRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCaptureRootView.swift; sourceTree = "<group>"; };
@@ -94,6 +106,15 @@
 				287B92268DF262B6C48C35E6 /* VoiceCaptureRoute.swift */,
 			);
 			path = Routing;
+			sourceTree = "<group>";
+		};
+		3192C9EC07B21BBC32AF57F5 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				2F9E0B75C29E044706EBAB86 /* Color+Hex.swift */,
+				A5D6A4644918304EE122DB3A /* ExpenseStyle.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		364ABABF3CC84AE87C0A69BE /* Products */ = {
@@ -125,6 +146,16 @@
 			);
 			sourceTree = "<group>";
 		};
+		90043CAE850AC0DB696E1CFE /* History */ = {
+			isa = PBXGroup;
+			children = (
+				510B899BF6061FBBB4BEAEDD /* Expense.swift */,
+				8E3BA351C7A0FF6C62A4582F /* ExpenseFormView.swift */,
+				4181B62422B14C5AA93C27EF /* HistoryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
 		B1A777F386C56AE34B0FF95A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,11 +168,13 @@
 		BB9426C56FCC8288C45F3197 /* FinanceAgent */ = {
 			isa = PBXGroup;
 			children = (
+				C796D3A544CAD160917FC678 /* Assets.xcassets */,
 				5B6A9BFDF9EE6C9DDA3DF56B /* FinanceAgent.entitlements */,
 				CD3D6F5C3AC1F5F6DE5513AC /* FinanceAgentApp.swift */,
 				A20335D4DD2AAE2B615D4E3F /* Info.plist */,
 				BE5871A09073FE646ED28EE1 /* README.md */,
 				F77D21E4D4A3F452D904B958 /* Features */,
+				3192C9EC07B21BBC32AF57F5 /* Support */,
 			);
 			path = FinanceAgent;
 			sourceTree = "<group>";
@@ -173,6 +206,7 @@
 		F77D21E4D4A3F452D904B958 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				90043CAE850AC0DB696E1CFE /* History */,
 				D3BEB82DFA6A7E951761A868 /* Voice */,
 			);
 			path = Features;
@@ -272,6 +306,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79373F44AE71B80378F4AB31 /* Assets.xcassets in Resources */,
 				9D6447FE2D21919D305ADCC7 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,7 +337,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A418526C9DE8D99EDB5615D /* Color+Hex.swift in Sources */,
+				EDDAFC8B65D9C05C647AA3CB /* Expense.swift in Sources */,
+				950802F9F51B5CEEC1EE6FDC /* ExpenseFormView.swift in Sources */,
+				06D7342F2ED1CFF0B376DB51 /* ExpenseStyle.swift in Sources */,
 				568FBAF19333F7166DC68C12 /* FinanceAgentApp.swift in Sources */,
+				AC35A71E1E8F602EC50CFD28 /* HistoryView.swift in Sources */,
 				CE4CAAD924F87686EBFA6991 /* PulsingMicButton.swift in Sources */,
 				75247382C189099A2DC6A0A6 /* StartExpenseCaptureIntent.swift in Sources */,
 				0E7FC2E8386A3F39BD0423D4 /* VoiceCaptureRootView.swift in Sources */,

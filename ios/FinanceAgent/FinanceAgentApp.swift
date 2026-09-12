@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 @main
@@ -9,5 +10,6 @@ struct FinanceAgentApp: App {
     WindowGroup {
       VoiceCaptureRootView(voiceCaptureRequested: $voiceCaptureRequested)
     }
+    .modelContainer(for: Expense.self)
   }
 }
