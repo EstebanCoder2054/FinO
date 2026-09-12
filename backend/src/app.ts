@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Context, Hono } from "hono";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
 import { randomUUID } from "node:crypto";
@@ -28,33 +28,46 @@ export function createApp() {
     await next();
   });
 
+  const statusResponse = {
+    success: true,
+    service: "FinoAI backend",
+    status: "ok"
+  };
+
   app.get("/", (c) => {
-    return c.json({
-      success: true,
-      service: "FinoAI backend",
-      status: "ok"
-    });
+    return c.json(statusResponse);
   });
 
   app.get("/api", (c) => {
+    return c.json(statusResponse);
+  });
+
+  app.get("/api/index", (c) => {
     return c.json({
       success: true,
       service: "FinoAI backend",
-      status: "ok"
+      status: "ok",
+      routedBy: "vercel-function"
     });
   });
 
+  const healthResponse = {
+    success: true,
+    status: "ok"
+  };
+
   app.get("/health", (c) => {
-    return c.json({
-      success: true,
-      status: "ok"
-    });
+    return c.json(healthResponse);
   });
 
   app.get("/api/health", (c) => {
+    return c.json(healthResponse);
+  });
+
+  app.get("/api/index/health", (c) => {
     return c.json({
-      success: true,
-      status: "ok"
+      ...healthResponse,
+      routedBy: "vercel-function"
     });
   });
 
@@ -66,40 +79,20 @@ export function createApp() {
     return c.json(getRuntimeDiagnostics());
   });
 
+  app.get("/api/index/debug/runtime", async (c) => {
+    return c.json(getRuntimeDiagnostics());
+  });
+
+  app.post("/expenses", async (c) => {
+    return createExpense(c);
+  });
+
   app.post("/api/expenses", async (c) => {
-    const userId = resolveUserId();
-    const body = validateCreateExpenseRequest(await c.req.json());
-    const parsed = await processExpenseInput(body.input);
+    return createExpense(c);
+  });
 
-    if (parsed.status === "needs_clarification") {
-      return c.json(
-        {
-          success: false,
-          code: "needs_clarification",
-          message: parsed.message
-        },
-        400
-      );
-    }
-
-    const expense = await saveExpenseForUser(userId, parsed.expense, c.req.header("idempotency-key"));
-
-    return c.json(
-      {
-        success: true,
-        expense: {
-          id: expense.id,
-          amount: expense.amount,
-          currency: expense.currency,
-          category: expense.category,
-          description: expense.description,
-          merchant: expense.merchant,
-          source: expense.source,
-          createdAt: expense.createdAt
-        }
-      },
-      201
-    );
+  app.post("/api/index/expenses", async (c) => {
+    return createExpense(c);
   });
 
   app.onError((error, c) => {
@@ -108,6 +101,42 @@ export function createApp() {
   });
 
   return app;
+}
+
+async function createExpense(c: Context<AppBindings>) {
+  const userId = resolveUserId();
+  const body = validateCreateExpenseRequest(await c.req.json());
+  const parsed = await processExpenseInput(body.input);
+
+  if (parsed.status === "needs_clarification") {
+    return c.json(
+      {
+        success: false,
+        code: "needs_clarification",
+        message: parsed.message
+      },
+      400
+    );
+  }
+
+  const expense = await saveExpenseForUser(userId, parsed.expense, c.req.header("idempotency-key"));
+
+  return c.json(
+    {
+      success: true,
+      expense: {
+        id: expense.id,
+        amount: expense.amount,
+        currency: expense.currency,
+        category: expense.category,
+        description: expense.description,
+        merchant: expense.merchant,
+        source: expense.source,
+        createdAt: expense.createdAt
+      }
+    },
+    201
+  );
 }
 
 function resolveUserId(): string {
