@@ -6,6 +6,7 @@ enum VoiceCaptureState: Equatable {
   case listening
   case transcribing
   case submitting
+  case success
   case failure(VoiceCaptureFailure)
 }
 
@@ -55,7 +56,7 @@ enum VoiceCaptureReducer {
     case .submissionStarted:
       return .submitting
     case .submissionSucceeded:
-      return .idle
+      return .success
     case .submissionFailed:
       return .failure(.submissionFailed)
     }

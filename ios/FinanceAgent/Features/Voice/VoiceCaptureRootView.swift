@@ -5,6 +5,7 @@ struct VoiceCaptureRootView: View {
   @Binding var voiceCaptureRequested: Bool
   @StateObject private var viewModel = VoiceCaptureViewModel()
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     NavigationStack {
@@ -43,6 +44,11 @@ struct VoiceCaptureRootView: View {
     .onChange(of: voiceCaptureRequested) { _, _ in
       startRequestedCaptureIfNeeded()
     }
+    .onChange(of: viewModel.state) { oldValue, newValue in
+      if case .success = oldValue, newValue == .idle {
+        dismiss()
+      }
+    }
   }
 
   private var backgroundGradient: some View {
@@ -69,16 +75,17 @@ struct VoiceCaptureRootView: View {
         .font(.subheadline.weight(.semibold))
         .foregroundStyle(.mint)
       Spacer()
-      NavigationLink {
-        HistoryView(voiceCaptureRequested: $voiceCaptureRequested)
+      statusPill
+      Button {
+        viewModel.cancel()
+        dismiss()
       } label: {
-        Image(systemName: "list.bullet.rectangle.portrait")
+        Image(systemName: "xmark")
           .font(.subheadline.weight(.semibold))
           .foregroundStyle(.white.opacity(0.85))
           .padding(8)
           .background(.white.opacity(0.1), in: Circle())
       }
-      statusPill
     }
   }
 
@@ -107,7 +114,10 @@ struct VoiceCaptureRootView: View {
           .multilineTextAlignment(.center)
       }
 
-      if !viewModel.transcript.isEmpty {
+      if case .success = viewModel.state, let saved = viewModel.lastSavedExpense {
+        successCard(saved)
+          .transition(.scale.combined(with: .opacity))
+      } else if !viewModel.transcript.isEmpty {
         transcriptCard
           .transition(.move(edge: .bottom).combined(with: .opacity))
       }
@@ -119,6 +129,29 @@ struct VoiceCaptureRootView: View {
     }
     .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.transcript)
     .animation(.easeInOut(duration: 0.25), value: viewModel.state)
+  }
+
+  private func successCard(_ expense: CapturedExpense) -> some View {
+    VStack(spacing: 10) {
+      Text("✅")
+        .font(.system(size: 44))
+      Text(expense.description)
+        .font(.subheadline.weight(.medium))
+        .foregroundStyle(.white.opacity(0.85))
+        .multilineTextAlignment(.center)
+        .lineLimit(1)
+      if let amount = expense.amount {
+        Text(amount, format: .currency(code: expense.currency).precision(.fractionLength(0)))
+          .font(.title3.weight(.bold))
+          .foregroundStyle(.mint)
+      }
+    }
+    .padding(20)
+    .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+    .overlay(
+      RoundedRectangle(cornerRadius: 24, style: .continuous)
+        .strokeBorder(.white.opacity(0.12))
+    )
   }
 
   private var transcriptCard: some View {
@@ -157,6 +190,7 @@ struct VoiceCaptureRootView: View {
       if showsCancel {
         Button("Cancelar", role: .cancel) {
           viewModel.cancel()
+          dismiss()
         }
         .font(.subheadline.weight(.semibold))
         .foregroundStyle(.white.opacity(0.7))
@@ -174,6 +208,8 @@ struct VoiceCaptureRootView: View {
       return .busy
     case .listening:
       return .listening
+    case .success:
+      return .success
     case .failure:
       return .failure
     }
@@ -184,6 +220,7 @@ struct VoiceCaptureRootView: View {
     case .listening: return "Te escucho"
     case .transcribing: return "Perfecto"
     case .submitting: return "Enviando…"
+    case .success: return "¡Guardado!"
     case .failure: return "Intentémoslo de nuevo"
     case .requestingPermission: return "Un momento"
     case .idle: return "Registra un gasto"
@@ -195,6 +232,7 @@ struct VoiceCaptureRootView: View {
     case .listening: return "Di qué compraste y cuánto pagaste."
     case .transcribing: return "Ya casi enviamos tu gasto."
     case .submitting: return "Estamos guardando tu gasto, espera un momento."
+    case .success: return "Tu gasto quedó registrado correctamente ✅."
     case .requestingPermission: return "Activando el micrófono y el reconocimiento de voz."
     case .idle: return "Por ejemplo: “Gasté cuarenta y cinco mil pesos en Uber”."
     case let .failure(failure): return failure.message
@@ -207,6 +245,7 @@ struct VoiceCaptureRootView: View {
     case .requestingPermission: return "Solicitando permisos…"
     case .transcribing: return "Toca para grabar otro gasto"
     case .submitting: return "Enviando…"
+    case .success: return "¡Listo!"
     case .failure: return "Toca para intentar de nuevo"
     case .idle: return "Toca para hablar"
     }
@@ -219,6 +258,7 @@ struct VoiceCaptureRootView: View {
     case .listening: return "Escuchando"
     case .transcribing: return "Procesando"
     case .submitting: return "Enviando"
+    case .success: return "Guardado"
     case .failure: return "Error"
     }
   }
@@ -227,6 +267,7 @@ struct VoiceCaptureRootView: View {
     switch viewModel.state {
     case .failure: return .red
     case .listening: return .mint
+    case .success: return .green
     case .transcribing, .submitting: return .yellow
     case .requestingPermission, .idle: return .white.opacity(0.6)
     }

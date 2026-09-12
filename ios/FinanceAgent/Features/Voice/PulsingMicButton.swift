@@ -4,6 +4,7 @@ enum MicButtonVisualState: Equatable {
   case idle
   case busy
   case listening
+  case success
   case failure
 }
 
@@ -54,6 +55,7 @@ struct PulsingMicButton: View {
       ringsExpanded = visualState == .listening
     }
     .sensoryFeedback(.impact(weight: .medium), trigger: visualState == .listening)
+    .sensoryFeedback(.success, trigger: visualState == .success)
     .sensoryFeedback(.error, trigger: visualState == .failure)
   }
 
@@ -64,6 +66,7 @@ struct PulsingMicButton: View {
   private var gradientColors: [Color] {
     switch visualState {
     case .listening: return [.mint, .teal]
+    case .success: return [.green, .mint]
     case .failure: return [.orange, .red]
     case .busy: return [Color.white.opacity(0.25), Color.white.opacity(0.1)]
     case .idle: return [.mint, .mint.opacity(0.75)]
@@ -73,6 +76,7 @@ struct PulsingMicButton: View {
   private var iconName: String {
     switch visualState {
     case .listening: return "waveform"
+    case .success: return "checkmark"
     case .failure: return "exclamationmark.triangle.fill"
     case .busy, .idle: return "mic.fill"
     }

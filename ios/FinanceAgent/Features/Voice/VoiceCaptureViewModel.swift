@@ -10,6 +10,7 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
   @Published private(set) var state: VoiceCaptureState = .idle
   @Published private(set) var transcript = ""
   @Published private(set) var audioLevel: CGFloat = 0
+  @Published private(set) var lastSavedExpense: CapturedExpense?
 
   /// Invoked with the finalized transcript once a submission succeeds, so the
   /// view layer can persist it (e.g. to SwiftData) without this view model
@@ -25,6 +26,7 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
   func beginCapture() {
     stopListening()
     transcript = ""
+    lastSavedExpense = nil
     state = VoiceCaptureReducer.reduce(state, event: .begin)
 
     Task {
@@ -55,6 +57,7 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
   func cancel() {
     stopListening()
     transcript = ""
+    lastSavedExpense = nil
     state = .idle
   }
 
@@ -82,8 +85,17 @@ final class VoiceCaptureViewModel: NSObject, ObservableObject {
         let expense = try await apiClient.createExpense(from: text)
         guard transcript == text else { return }
         onExpenseCaptured?(expense)
+        lastSavedExpense = expense
         transcript = ""
         state = VoiceCaptureReducer.reduce(state, event: .submissionSucceeded)
+
+        // Hold the success screen briefly so the ✅ confirmation is actually
+        // seen, then return to idle on its own (the view dismisses on that
+        // success -> idle transition).
+        try? await Task.sleep(for: .seconds(1.4))
+        guard state == .success else { return }
+        lastSavedExpense = nil
+        state = .idle
       } catch {
         voiceCaptureLog.error("expense submission failed: \(String(describing: error), privacy: .public)")
         guard transcript == text else { return }
