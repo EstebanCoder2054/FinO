@@ -1,5 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { ApiError } from "../api/errors.js";
+import { getOptionalEnv, getRequiredEnv } from "../config/env.js";
+import { supabaseAdmin } from "../db/supabase.js";
+import { getAuthenticatedUserId } from "./supabaseAuth.js";
 
 declare global {
   namespace Express {
@@ -11,7 +14,15 @@ declare global {
   }
 }
 
-export function requireAuth(req: Request, _res: Response, next: NextFunction): void {
+export async function requireAuth(req: Request, _res: Response, next: NextFunction): Promise<void> {
+  if (getOptionalEnv("AUTH_MODE", "required") === "disabled") {
+    req.auth = {
+      userId: getRequiredEnv("DEV_USER_ID")
+    };
+    next();
+    return;
+  }
+
   const authorization = req.header("authorization");
 
   if (!authorization?.startsWith("Bearer ")) {
@@ -19,6 +30,13 @@ export function requireAuth(req: Request, _res: Response, next: NextFunction): v
     return;
   }
 
-  // Step 3 placeholder: verify Supabase JWT and derive user ID from token claims.
-  next(new ApiError(501, "internal_error", "Authentication verification is not implemented yet."));
+  try {
+    const token = authorization.slice("Bearer ".length).trim();
+    req.auth = {
+      userId: await getAuthenticatedUserId(token, supabaseAdmin)
+    };
+    next();
+  } catch (error) {
+    next(error);
+  }
 }
